@@ -9,24 +9,13 @@ import javafx.application.Application;
  */
 public class UIController {
 
-  private GameView gameView;
   private GameController gameController;
-
-  /**
-   * 
-   */
-  public UIController() {
-    super();
-
-    this.gameView = new GameView();
-
-  }
 
   public void showGame(GameController gameController) {
 
     this.gameController = gameController;
 
-    gameView.show();
+    GameView.show(gameController.getBoard());
 
   }
 
