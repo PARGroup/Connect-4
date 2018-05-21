@@ -19,6 +19,7 @@ public class GameController {
 
     board = new Board(ConfigsLoader.getBoardConfig());
 
+
   }
 
   /**

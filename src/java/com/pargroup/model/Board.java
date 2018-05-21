@@ -25,6 +25,7 @@ public class Board {
     chips = new LinkedList[boardConfig.getColumns()];
 
     for (int i = 0; i < boardConfig.getColumns(); i++) {
+
       chips[i] = new LinkedList<Chip>();
     }
 
@@ -45,6 +46,7 @@ public class Board {
    */
   public BoardConfig getBoardConfig() {
     return boardConfig;
+
   }
 
 }

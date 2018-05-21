@@ -4,6 +4,7 @@ import com.pargroup.model.Board;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -27,7 +28,8 @@ public class BoardView extends StackPane {
     super();
 
     this.board = board;
-    this.boardConfig = board.getBoardConfig();
+   this.boardConfig = board.getBoardConfig();
+
 
     boardTexture = new ImageView(TextureLoader.getTexture("board"));
     chipsPane = new GridPane();
