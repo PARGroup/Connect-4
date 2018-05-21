@@ -1,6 +1,7 @@
 package com.pargroup.controller;
 
 import com.pargroup.model.Board;
+import com.pargroup.resources.ConfigsLoader;
 
 /**
  * @author Rawad Aboudlal
@@ -16,7 +17,7 @@ public class GameController {
   public GameController() {
     super();
 
-    board = new Board();
+    board = new Board(ConfigsLoader.getBoardConfig());
 
   }
 

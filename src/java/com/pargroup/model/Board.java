@@ -9,8 +9,7 @@ import java.util.LinkedList;
  */
 public class Board {
 
-  private final int width = 7;
-  private final int height = 6;
+  private final BoardConfig boardConfig;
 
   private LinkedList<Chip>[] chips;
 
@@ -18,12 +17,14 @@ public class Board {
    * 
    */
   @SuppressWarnings("unchecked")
-  public Board() {
+  public Board(BoardConfig boardConfig) {
     super();
 
-    chips = new LinkedList[width];
+    this.boardConfig = boardConfig;
 
-    for (int i = 0; i < width; i++) {
+    chips = new LinkedList[boardConfig.getColumns()];
+
+    for (int i = 0; i < boardConfig.getColumns(); i++) {
       chips[i] = new LinkedList<Chip>();
     }
 
@@ -40,17 +41,10 @@ public class Board {
   }
 
   /**
-   * @return the width
+   * @return the boardConfig
    */
-  public int getWidth() {
-    return width;
-  }
-
-  /**
-   * @return the height
-   */
-  public int getHeight() {
-    return height;
+  public BoardConfig getBoardConfig() {
+    return boardConfig;
   }
 
 }
