@@ -1,8 +1,12 @@
 package com.pargroup.view;
 
+import com.pargroup.model.Board;
+import com.pargroup.model.Chip;
+import com.pargroup.model.ChipColour;
+import com.pargroup.resources.TextureLoader;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -13,9 +17,17 @@ public class GameView extends Application {
 
   private static final String WINDOW_TITLE = "Connect 4";
 
-  private Stage stage;
+  private static Stage stage;
+  private static BorderPane root;
+  private static BoardView boardView;
 
-  public void show() {
+  private static Board board;
+
+  public static void show(Board board) {
+
+    GameView.board = board;
+
+    TextureLoader.loadTextures();
 
     new Thread(new Runnable() {
       /**
@@ -35,15 +47,35 @@ public class GameView extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
 
-    this.stage = primaryStage;
+    stage = primaryStage;
 
-    Pane root = new Pane();
+    root = new BorderPane();
 
     Scene scene = new Scene(root);
 
+    constructView();
+
+    // root.setPrefSize(640, 480);
+
     stage.setScene(scene);
+    stage.sizeToScene();
+    stage.centerOnScreen();
     stage.setTitle(WINDOW_TITLE);
     stage.show();
+    stage.setMinWidth(stage.getWidth());
+    stage.setMinHeight(stage.getHeight());
+
+  }
+
+  private void constructView() {
+
+    boardView = new BoardView(board);
+
+    root.setCenter(boardView);
+
+    Chip mockChip = new Chip();
+    mockChip.setColour(ChipColour.RED);
+    boardView.chipPlaced(mockChip, 6, 7);
 
   }
 
