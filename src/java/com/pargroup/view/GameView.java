@@ -1,8 +1,11 @@
 package com.pargroup.view;
 
 import com.pargroup.model.Board;
+import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.model.ChipColour;
+import com.pargroup.resources.ConfigsLoader;
+
 import com.pargroup.resources.TextureLoader;
 import javafx.application.Application;
 import javafx.scene.Scene;

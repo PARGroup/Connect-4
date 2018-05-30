@@ -1,9 +1,10 @@
 package com.pargroup.view;
 
 import com.pargroup.model.Board;
+import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
-import javafx.geometry.Insets;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.StackPane;
 public class BoardView extends StackPane {
 
   private Board board;
+  private BoardConfig boardConfig;
 
   private ImageView boardTexture;
   private GridPane chipsPane;
@@ -26,13 +28,15 @@ public class BoardView extends StackPane {
     super();
 
     this.board = board;
+   this.boardConfig = board.getBoardConfig();
+
 
     boardTexture = new ImageView(TextureLoader.getTexture("board"));
     chipsPane = new GridPane();
 
-    chipsPane.setHgap(8);
-    chipsPane.setVgap(8);
-    chipsPane.setPadding(new Insets(8, 0, 0, 8));
+    chipsPane.setHgap(boardConfig.getHorizontalGap());
+    chipsPane.setVgap(boardConfig.getVerticalGap());
+    chipsPane.setPadding(boardConfig.getBoardInsets());
 
     getChildren().add(boardTexture);
     getChildren().add(chipsPane);
