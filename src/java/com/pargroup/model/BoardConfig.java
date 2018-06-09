@@ -1,7 +1,5 @@
 package com.pargroup.model;
 
-import javafx.geometry.Insets;
-
 /**
  * @author Rawad Aboudlal
  *
@@ -19,8 +17,6 @@ public class BoardConfig {
 
   private int horizontalGap;
   private int verticalGap;
-
-  private Insets boardInsets;
 
   /**
    * @return the columns
@@ -132,20 +128,6 @@ public class BoardConfig {
    */
   public void setVerticalGap(int verticalGap) {
     this.verticalGap = verticalGap;
-  }
-
-  /**
-   * @return the boardInsets
-   */
-  public Insets getBoardInsets() {
-    return boardInsets;
-  }
-
-  /**
-   * @param boardInsets the boardInsets to set
-   */
-  public void setBoardInsets(Insets boardInsets) {
-    this.boardInsets = boardInsets;
   }
 
 }
