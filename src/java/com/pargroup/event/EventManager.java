@@ -3,9 +3,9 @@ package com.pargroup.event;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-import com.pargroup.event.listener.GameListener;
+import com.pargroup.event.listener.RequestListener;
 import com.pargroup.event.listener.Listener;
-import com.pargroup.event.listener.UIListener;
+import com.pargroup.event.listener.ResolutionListener;
 
 /**
  * @author Rawad Aboudlal
@@ -14,19 +14,19 @@ import com.pargroup.event.listener.UIListener;
 public class EventManager {
 
 
-  private HashMap<Class<?>, LinkedList<GameListener>> gameEventListeners =
-      new HashMap<Class<?>, LinkedList<GameListener>>();
-  private HashMap<Class<?>, LinkedList<UIListener>> uiEventListeners =
-      new HashMap<Class<?>, LinkedList<UIListener>>();
+  private HashMap<Class<?>, LinkedList<RequestListener>> requestEventListeners =
+      new HashMap<Class<?>, LinkedList<RequestListener>>();
+  private HashMap<Class<?>, LinkedList<ResolutionListener>> resolutionEventListeners =
+      new HashMap<Class<?>, LinkedList<ResolutionListener>>();
 
   private Queue<Event> events = new LinkedList<Event>();
 
-  public void addGameListener(Class<? extends GameEvent> eventClass, GameListener listener) {
-    addGenericListener(gameEventListeners, eventClass, listener);
+  public void addRequestListener(Class<? extends RequestEvent> eventClass, RequestListener listener) {
+    addGenericListener(requestEventListeners, eventClass, listener);
   }
 
-  public void addUIListener(Class<? extends UIEvent> eventClass, UIListener listener) {
-    addGenericListener(uiEventListeners, eventClass, listener);
+  public void addResolutionListener(Class<? extends ResolutionEvent> eventClass, ResolutionListener listener) {
+    addGenericListener(resolutionEventListeners, eventClass, listener);
   }
 
   private <T extends Listener> void addGenericListener(HashMap<Class<?>, LinkedList<T>> listeners,
@@ -54,29 +54,29 @@ public class EventManager {
 
   private void processEvent(Event e) {
 
-    if (e instanceof GameEvent) {
+    if (e instanceof RequestEvent) {
 
-      GameEvent gameEvent = (GameEvent) e;
+      RequestEvent gameEvent = (RequestEvent) e;
 
-      LinkedList<GameListener> gameListeners = gameEventListeners.get(e.getClass());
+      LinkedList<RequestListener> gameListeners = requestEventListeners.get(e.getClass());
 
       if (gameListeners == null)
         return;
 
-      for (GameListener listener : gameListeners) {
+      for (RequestListener listener : gameListeners) {
         listener.onEvent(gameEvent);
       }
 
-    } else if (e instanceof UIEvent) {
+    } else if (e instanceof ResolutionEvent) {
 
-      UIEvent uiEvent = (UIEvent) e;
+      ResolutionEvent uiEvent = (ResolutionEvent) e;
 
-      LinkedList<UIListener> uiListeners = uiEventListeners.get(e.getClass());
+      LinkedList<ResolutionListener> uiListeners = resolutionEventListeners.get(e.getClass());
 
       if (uiListeners == null)
         return;
 
-      for (UIListener listener : uiListeners) {
+      for (ResolutionListener listener : uiListeners) {
         listener.onEvent(uiEvent);
       }
 

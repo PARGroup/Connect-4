@@ -6,7 +6,7 @@ import com.pargroup.model.Chip;
  * @author Rawad Aboudlal
  *
  */
-public class ChipPlacedEvent extends UIEvent {
+public class ChipPlacedEvent extends ResolutionEvent {
 
   private final Chip chip;
 

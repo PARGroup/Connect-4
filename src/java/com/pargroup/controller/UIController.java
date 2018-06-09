@@ -4,8 +4,8 @@ import com.pargroup.event.ChipPlacedEvent;
 import com.pargroup.event.PlaceChipRequestEvent;
 import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
-import com.pargroup.event.UIEvent;
-import com.pargroup.event.listener.UIListener;
+import com.pargroup.event.ResolutionEvent;
+import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
@@ -22,7 +22,7 @@ import javafx.stage.WindowEvent;
  * @author Rawad Aboudlal
  *
  */
-public class UIController implements UIListener, EventHandler<ActionEvent> {
+public class UIController implements ResolutionListener, EventHandler<ActionEvent> {
 
   private GameController gameController;
   private GameView gameView;
@@ -45,8 +45,8 @@ public class UIController implements UIListener, EventHandler<ActionEvent> {
 
   public void initialize() {
 
-    gameController.getEventManager().addUIListener(ChipPlacedEvent.class, this);
-    gameController.getEventManager().addUIListener(StopGameEvent.class, this);
+    gameController.getEventManager().addResolutionListener(ChipPlacedEvent.class, this);
+    gameController.getEventManager().addResolutionListener(StopGameEvent.class, this);
 
     TextureLoader.loadTextures();
 
@@ -61,7 +61,7 @@ public class UIController implements UIListener, EventHandler<ActionEvent> {
    * @see com.pargroup.event.listener.Listener#onEvent(com.pargroup.event.Event)
    */
   @Override
-  public void onEvent(UIEvent e) {
+  public void onEvent(ResolutionEvent e) {
 
     if (e instanceof ChipPlacedEvent) {
 

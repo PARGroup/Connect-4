@@ -3,27 +3,35 @@ package com.pargroup.controller;
 import java.util.concurrent.TimeUnit;
 import com.pargroup.event.ChipPlacedEvent;
 import com.pargroup.event.EventManager;
-import com.pargroup.event.GameEvent;
 import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.RequestEvent;
+import com.pargroup.event.ResolutionEvent;
 import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
-import com.pargroup.event.listener.GameListener;
+import com.pargroup.event.listener.RequestListener;
+import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
 import com.pargroup.model.ChipColour;
+import com.pargroup.model.Player;
 import com.pargroup.resources.ConfigsLoader;
 
 /**
  * @author Rawad Aboudlal
  *
  */
-public class GameController implements GameListener {
+public class GameController implements RequestListener, ResolutionListener {
 
   private static final long TICK_RATE = TimeUnit.MILLISECONDS.toNanos(30);
 
   private EventManager eventManager;
 
   private Board board;
+
+  private Player[] players;
+  private Player currentPlayer;
+
+  private int turn;
 
   private long accumulatedTime;
   private long prevTime;
@@ -35,10 +43,18 @@ public class GameController implements GameListener {
 
     eventManager = new EventManager();
 
-    eventManager.addGameListener(PlaceChipRequestEvent.class, this);
-    eventManager.addGameListener(StopRequestEvent.class, this);
+    eventManager.addRequestListener(PlaceChipRequestEvent.class, this);
+    eventManager.addRequestListener(StopRequestEvent.class, this);
+
+    eventManager.addResolutionListener(ChipPlacedEvent.class, this);
 
     board = new Board(ConfigsLoader.getBoardConfig());
+
+    players = new Player[] {new Player(ChipColour.RED), new Player(ChipColour.YELLOW)};
+
+    turn = 0;
+
+    currentPlayer = players[0];
 
     running = true;
     paused = false;
@@ -84,25 +100,41 @@ public class GameController implements GameListener {
   }
 
   /**
-   * @see com.pargroup.event.listener.GameListener#onEvent(com.pargroup.event.GameEvent)
+   * @see com.pargroup.event.listener.RequestListener#onEvent(com.pargroup.event.RequestEvent)
    */
   @Override
-  public void onEvent(GameEvent e) {
+  public void onEvent(RequestEvent e) {
 
     if (e instanceof PlaceChipRequestEvent) {
 
       PlaceChipRequestEvent placeChipRequestEvent = (PlaceChipRequestEvent) e;
 
-      Chip mockChip = new Chip();
-      mockChip.setColour(ChipColour.RED);
+      Chip chip = new Chip();
+      chip.setColour(currentPlayer.getChipColour());
 
-      placeChip(mockChip, placeChipRequestEvent.getColumn());
+      placeChip(chip, placeChipRequestEvent.getColumn());
 
     } else if (e instanceof StopRequestEvent) {
 
       // Could have some logic to decide whether we should stop right now or not (e.g. prompt to
       // save or something).
       eventManager.addEvent(new StopGameEvent());
+
+    }
+
+  }
+
+  /**
+   * @see com.pargroup.event.listener.ResolutionListener#onEvent(com.pargroup.event.ResolutionEvent)
+   */
+  @Override
+  public void onEvent(ResolutionEvent e) {
+
+    if (e instanceof ChipPlacedEvent) {
+
+      turn++;
+
+      currentPlayer = players[turn % players.length];
 
     }
 

@@ -4,6 +4,6 @@ package com.pargroup.event;
  * @author Rawad Aboudlal
  *
  */
-public class UIEvent extends Event {
+public class ResolutionEvent extends Event {
 
 }

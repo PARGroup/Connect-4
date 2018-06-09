@@ -4,6 +4,6 @@ package com.pargroup.event;
  * @author Rawad Aboudlal
  *
  */
-public class StopRequestEvent extends GameEvent {
+public class StopRequestEvent extends RequestEvent {
 
 }

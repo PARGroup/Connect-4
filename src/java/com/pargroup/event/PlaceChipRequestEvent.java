@@ -4,7 +4,7 @@ package com.pargroup.event;
  * @author Rawad Aboudlal
  *
  */
-public class PlaceChipRequestEvent extends GameEvent {
+public class PlaceChipRequestEvent extends RequestEvent {
 
   private final int column;
 
