@@ -22,8 +22,8 @@ public class Connect4 extends Application {
   public static void main(String[] args) {
 
     gameController = new GameController();
-    uiController = new UIController(gameController);
     gameView = new GameView();
+    uiController = new UIController(gameController, gameView);
 
     Application.launch(args);
 

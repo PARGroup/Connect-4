@@ -6,7 +6,7 @@ import com.pargroup.event.GameEvent;
  * @author Rawad Aboudlal
  *
  */
-public interface GameListener {
+public interface GameListener extends Listener {
 
   public void onEvent(GameEvent e);
 

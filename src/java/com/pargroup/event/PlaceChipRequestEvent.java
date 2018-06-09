@@ -4,14 +4,14 @@ package com.pargroup.event;
  * @author Rawad Aboudlal
  *
  */
-public class ChipPlaceEvent extends UIEvent {
+public class PlaceChipRequestEvent extends GameEvent {
 
   private final int column;
 
   /**
    * @param column
    */
-  public ChipPlaceEvent(int column) {
+  public PlaceChipRequestEvent(int column) {
     super();
 
     this.column = column;

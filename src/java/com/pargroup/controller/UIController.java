@@ -1,24 +1,31 @@
 package com.pargroup.controller;
 
-import com.pargroup.event.ChipPlaceEvent;
+import com.pargroup.event.ChipPlacedEvent;
+import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.StopGameEvent;
+import com.pargroup.event.StopRequestEvent;
 import com.pargroup.event.UIEvent;
 import com.pargroup.event.listener.UIListener;
 import com.pargroup.model.BoardConfig;
+import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
 import com.pargroup.view.BoardView;
 import com.pargroup.view.GameView;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * @author Rawad Aboudlal
  *
  */
-public class UIController implements UIListener {
+public class UIController implements UIListener, EventHandler<ActionEvent> {
 
   private GameController gameController;
+  private GameView gameView;
 
   private BoardView boardView;
 
@@ -26,20 +33,28 @@ public class UIController implements UIListener {
 
   /**
    * @param gameController
+   * @param gameView
    */
-  public UIController(GameController gameController) {
+  public UIController(GameController gameController, GameView gameView) {
     super();
 
     this.gameController = gameController;
+    this.gameView = gameView;
 
   }
 
   public void initialize() {
 
-    gameController.addListener(ChipPlaceEvent.class, this);
+    gameController.getEventManager().addUIListener(ChipPlacedEvent.class, this);
+    gameController.getEventManager().addUIListener(StopGameEvent.class, this);
 
     TextureLoader.loadTextures();
 
+  }
+
+  private void terminate() {
+    gameController.terminate();
+    gameView.terminate();
   }
 
   /**
@@ -48,19 +63,25 @@ public class UIController implements UIListener {
   @Override
   public void onEvent(UIEvent e) {
 
-    if (e instanceof ChipPlaceEvent) {
-      ChipPlaceEvent chipPlaceEvent = (ChipPlaceEvent) e;
+    if (e instanceof ChipPlacedEvent) {
 
-      Circle chipView = new Circle(viewConfig.getChipRadius(), chip.getColor());
+      ChipPlacedEvent chipPlacedEvent = (ChipPlacedEvent) e;
 
-      final int x = column * (viewConfig.getChipRadius() * 2 + viewConfig.getHgap())
-          + viewConfig.getChipRadius() + (viewConfig.getHgap() / 2);
-      // vgap * 2 causes a little bounce effect for the top-most chip only.
-      final int y = viewConfig.getVgap() * 2 + viewConfig.getChipRadius();
-      final int endY = row * (viewConfig.getChipRadius() * 2 + viewConfig.getVgap())
-          + viewConfig.getChipRadius() + viewConfig.getVgap();
+      Chip chip = chipPlacedEvent.getChip();
 
-      GameController.setPaused(true);
+      int column = chipPlacedEvent.getColumn();
+      int row = chipPlacedEvent.getRow();
+
+
+      final int x = column * (boardConfig.getChipRadius() * 2 + boardConfig.getHgap())
+          + (boardConfig.getHgap() / 2);
+
+      // Note that this is negative so it will start slightly above the board.
+      final int y = -boardConfig.getVgap() / 2;
+      final int endY =
+          row * (boardConfig.getChipRadius() * 2 + boardConfig.getVgap()) + boardConfig.getVgap();
+
+      gameController.setPaused(true);
 
       Platform.runLater(new Runnable() {
         /**
@@ -68,9 +89,13 @@ public class UIController implements UIListener {
          */
         @Override
         public void run() {
-          GameView.placeChip(chipView, x, y, endY);
+          boardView.chipPlaced(UIController.this, chip, x, y, endY);
         }
       });
+
+    } else if (e instanceof StopGameEvent) {
+
+      terminate();
 
     }
 
@@ -81,7 +106,7 @@ public class UIController implements UIListener {
     this.boardView = boardView;
     this.boardConfig = boardView.getBoardConfig();
 
-    boardView.getChipsPane().addEventHandler(MouseEvent.MOUSE_CLICKED,
+    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_CLICKED,
         new EventHandler<MouseEvent>() {
           /**
            * @see javafx.event.EventHandler#handle(javafx.event.Event)
@@ -91,13 +116,36 @@ public class UIController implements UIListener {
 
             int x = (int) event.getX();
 
-            int column = (x - (boardConfig.getHorizontalGap() / 2))
-                / ((boardConfig.getChipWidth()) + boardConfig.getHorizontalGap());
+            int column = x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
 
-            gameController.addEvent(new ChipPlaceEvent(column));
+            gameController.getEventManager().addEvent(new PlaceChipRequestEvent(column));
 
           }
         });
+
+  }
+
+  public void addStage(Stage stage) {
+
+    stage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
+      /**
+       * @see javafx.event.EventHandler#handle(javafx.event.Event)
+       */
+      @Override
+      public void handle(WindowEvent event) {
+        gameController.getEventManager().addEvent(new StopRequestEvent());
+      }
+    });
+
+  }
+
+  /**
+   * @see javafx.event.EventHandler#handle(javafx.event.Event)
+   */
+  @Override
+  public void handle(ActionEvent event) {
+
+    gameController.setPaused(false);
 
   }
 

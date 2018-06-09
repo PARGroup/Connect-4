@@ -11,11 +11,13 @@ import javafx.scene.image.Image;
  */
 public class TextureLoader {
 
+  public static final String BOARD = "board";
+
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
   public static void loadTextures() {
 
-    TEXTURES.put("board", new Image(TextureLoader.getTextureAsStream("board")));
+    TEXTURES.put(BOARD, new Image(TextureLoader.getTextureAsStream("board-trans-yellow")));
     TEXTURES.put(ChipColour.RED.getChipName(),
         new Image(TextureLoader.getTextureAsStream(ChipColour.RED.getChipName())));
     TEXTURES.put(ChipColour.YELLOW.getChipName(),

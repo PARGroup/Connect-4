@@ -1,25 +1,27 @@
 package com.pargroup.controller;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.TimeUnit;
-import com.pargroup.event.Event;
-import com.pargroup.event.listener.UIListener;
+import com.pargroup.event.ChipPlacedEvent;
+import com.pargroup.event.EventManager;
+import com.pargroup.event.GameEvent;
+import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.StopGameEvent;
+import com.pargroup.event.StopRequestEvent;
+import com.pargroup.event.listener.GameListener;
 import com.pargroup.model.Board;
+import com.pargroup.model.Chip;
+import com.pargroup.model.ChipColour;
 import com.pargroup.resources.ConfigsLoader;
 
 /**
  * @author Rawad Aboudlal
  *
  */
-public class GameController {
+public class GameController implements GameListener {
 
   private static final long TICK_RATE = TimeUnit.MILLISECONDS.toNanos(30);
 
-  private final HashMap<Class<?>, LinkedList<UIListener>> uiEventListeners =
-      new HashMap<Class<?>, LinkedList<UIListener>>();
-  private final Queue<Event> events = new LinkedList<Event>();
+  private EventManager eventManager;
 
   private Board board;
 
@@ -30,6 +32,11 @@ public class GameController {
   private boolean paused;
 
   public void initialize() {
+
+    eventManager = new EventManager();
+
+    eventManager.addGameListener(PlaceChipRequestEvent.class, this);
+    eventManager.addGameListener(StopRequestEvent.class, this);
 
     board = new Board(ConfigsLoader.getBoardConfig());
 
@@ -70,31 +77,53 @@ public class GameController {
 
   private synchronized void tick() {
 
-    while (!paused && !events.isEmpty()) {
-      Event e = events.poll();
-      processEvent(e);
+    if (!paused) {
+      eventManager.processEvents();
     }
 
   }
 
-  private void processEvent(Event e) {
+  /**
+   * @see com.pargroup.event.listener.GameListener#onEvent(com.pargroup.event.GameEvent)
+   */
+  @Override
+  public void onEvent(GameEvent e) {
 
-  }
+    if (e instanceof PlaceChipRequestEvent) {
 
-  public synchronized void addEvent(Event e) {
-    events.add(e);
-  }
+      PlaceChipRequestEvent placeChipRequestEvent = (PlaceChipRequestEvent) e;
 
-  public void addUIListener(Class<?> eventClass, UIListener listener) {
+      Chip mockChip = new Chip();
+      mockChip.setColour(ChipColour.RED);
 
-    LinkedList<UIListener> listeners = uiEventListeners.get(eventClass);
+      placeChip(mockChip, placeChipRequestEvent.getColumn());
 
-    if (listeners == null) {
-      listeners = new LinkedList<UIListener>();
-      uiEventListeners.put(eventClass, listeners);
+    } else if (e instanceof StopRequestEvent) {
+
+      // Could have some logic to decide whether we should stop right now or not (e.g. prompt to
+      // save or something).
+      eventManager.addEvent(new StopGameEvent());
+
     }
 
-    listeners.add(listener);
+  }
+
+  private void placeChip(Chip chip, int column) {
+
+    Chip[][] chips = board.getChips();
+
+    int row = 0;
+
+    for (; row < chips.length && chips[row][column] == null; row++);
+
+    if (row <= 0) {
+      return;
+    }
+
+    row--;
+
+    chips[row][column] = chip;
+    eventManager.addEvent(new ChipPlacedEvent(chip, column, row));
 
   }
 
@@ -107,6 +136,13 @@ public class GameController {
    */
   public void setPaused(boolean paused) {
     this.paused = paused;
+  }
+
+  /**
+   * @return the eventManager
+   */
+  public EventManager getEventManager() {
+    return eventManager;
   }
 
   /**

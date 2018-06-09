@@ -2,8 +2,7 @@ package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
-import com.pargroup.model.Chip;
-import com.pargroup.model.ChipColour;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -27,6 +26,8 @@ public class GameView {
     stage = primaryStage;
 
     board = uiController.getGameController().getBoard();
+
+    uiController.addStage(stage);
 
     root = new BorderPane();
 
@@ -52,6 +53,21 @@ public class GameView {
 
     root.setCenter(boardView);
 
+  }
+
+  public void terminate() {
+    Platform.runLater(new Runnable() {
+
+      /**
+       * 
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+        stage.close();
+      }
+
+    });
   }
 
 }
