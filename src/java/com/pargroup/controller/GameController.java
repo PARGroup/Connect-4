@@ -48,9 +48,9 @@ public class GameController implements RequestListener, ResolutionListener {
 
     eventManager.addResolutionListener(ChipPlacedEvent.class, this);
 
-    board = new Board(ConfigsLoader.getBoardConfig());
+    board = new Board();
 
-    players = new Player[] {new Player(ChipColour.RED), new Player(ChipColour.YELLOW)};
+    players = new Player[] {new Player(), new Player()};
 
     turn = 0;
 
@@ -110,7 +110,7 @@ public class GameController implements RequestListener, ResolutionListener {
       PlaceChipRequestEvent placeChipRequestEvent = (PlaceChipRequestEvent) e;
 
       Chip chip = new Chip();
-      chip.setColour(currentPlayer.getChipColour());
+      // chip.setColour(currentPlayer.getChipColour());
 
       placeChip(chip, placeChipRequestEvent.getColumn());
 

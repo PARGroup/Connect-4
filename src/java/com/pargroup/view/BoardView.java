@@ -4,14 +4,15 @@ import com.pargroup.model.Board;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
-import javafx.animation.TranslateTransition;
+import com.pargroup.view.animation.AnimationFactory;
+import com.pargroup.view.theme.Theme;
+import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 
 /**
  * @author Rawad Aboudlal
@@ -20,6 +21,7 @@ import javafx.util.Duration;
 public class BoardView extends StackPane {
 
   private Board board;
+  private Theme theme;
   private BoardConfig boardConfig;
 
   private ImageView backgroundTexture;
@@ -29,12 +31,14 @@ public class BoardView extends StackPane {
 
   /**
    * @param board
+   * @param theme
    */
-  public BoardView(Board board) {
+  public BoardView(Board board, Theme theme) {
     super();
 
     this.board = board;
-    this.boardConfig = board.getBoardConfig();
+    this.theme = theme;
+    this.boardConfig = theme.getBoardConfig();
 
     Image boardImage = TextureLoader.getTexture(TextureLoader.BOARD);
 
@@ -61,16 +65,13 @@ public class BoardView extends StackPane {
 
     ChipView chipView = new ChipView(chip);
 
-    TranslateTransition translation = new TranslateTransition(Duration.millis(100), chipView);
-    translation.setFromX(x);
-    translation.setFromY(startY);
-    translation.setToX(x);
-    translation.setToY(endY);
+    Animation chipPlacementAnimation =
+        AnimationFactory.createAnimation(theme.getChipPlacementAnimation());
 
-    translation.setOnFinished(onAnimationFinishedHandler);
+    chipPlacementAnimation.setOnFinished(onAnimationFinishedHandler);
 
     chipsPane.getChildren().add(chipView);
-    translation.playFromStart();
+    chipPlacementAnimation.playFromStart();
 
   }
 

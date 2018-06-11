@@ -6,7 +6,7 @@ package com.pargroup.model;
  */
 public enum ChipColour {
 
-  RED("red_chip"), YELLOW("yellow_chip");
+  RED("red_chip"), BLUE("blue_chip"), YELLOW("yellow_chip");
 
   private final String chipName;
 

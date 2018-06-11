@@ -2,6 +2,7 @@ package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
+import com.pargroup.view.theme.Theme;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,6 +19,8 @@ public class GameView {
   private Stage stage;
   private BorderPane root;
   private BoardView boardView;
+
+  private Theme theme;
 
   private Board board;
 
@@ -49,7 +52,7 @@ public class GameView {
 
   private void constructView() {
 
-    boardView = new BoardView(board);
+    boardView = new BoardView(board, theme);
 
     root.setCenter(boardView);
 
