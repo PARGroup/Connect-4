@@ -1,7 +1,6 @@
 package com.pargroup.resources;
 
 import com.pargroup.model.BoardConfig;
-import javafx.geometry.Insets;
 
 /**
  * @author Rawad Aboudlal
@@ -16,12 +15,13 @@ public class ConfigsLoader {
     boardConfig.setColumns(7);
     boardConfig.setRows(6);
 
-    boardConfig.setBoardWidth(512);
+    boardConfig.setBoardWidth(504);
     boardConfig.setBoardHeight(440);
 
-    boardConfig.setHorizontalGap(8);
-    boardConfig.setVerticalGap(8);
-    boardConfig.setBoardInsets(new Insets(8, 0, 0, 8));
+    boardConfig.setHgap(8);
+    boardConfig.setVgap(8);
+
+    boardConfig.setChipRadius(32);
 
     boardConfig.setChipWidth(64);
     boardConfig.setChipHeight(64);

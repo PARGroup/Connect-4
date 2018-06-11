@@ -1,7 +1,5 @@
 package com.pargroup.model;
 
-import javafx.geometry.Insets;
-
 /**
  * @author Rawad Aboudlal
  *
@@ -14,13 +12,13 @@ public class BoardConfig {
   private int boardWidth;
   private int boardHeight;
 
+  private int chipRadius;
+
   private int chipWidth;
   private int chipHeight;
 
-  private int horizontalGap;
-  private int verticalGap;
-
-  private Insets boardInsets;
+  private int hgap;
+  private int vgap;
 
   /**
    * @return the columns
@@ -48,6 +46,20 @@ public class BoardConfig {
    */
   public void setRows(int rows) {
     this.rows = rows;
+  }
+
+  /**
+   * @return the chipRadius
+   */
+  public int getChipRadius() {
+    return chipRadius;
+  }
+
+  /**
+   * @param chipRadius the chipRadius to set
+   */
+  public void setChipRadius(int chipRadius) {
+    this.chipRadius = chipRadius;
   }
 
   /**
@@ -107,45 +119,31 @@ public class BoardConfig {
   }
 
   /**
-   * @return the horizontalGap
+   * @return the hgap
    */
-  public int getHorizontalGap() {
-    return horizontalGap;
+  public int getHgap() {
+    return hgap;
   }
 
   /**
-   * @param horizontalGap the horizontalGap to set
+   * @param hgap the hgap to set
    */
-  public void setHorizontalGap(int horizontalGap) {
-    this.horizontalGap = horizontalGap;
+  public void setHgap(int hgap) {
+    this.hgap = hgap;
   }
 
   /**
-   * @return the verticalGap
+   * @return the vgap
    */
-  public int getVerticalGap() {
-    return verticalGap;
+  public int getVgap() {
+    return vgap;
   }
 
   /**
-   * @param verticalGap the verticalGap to set
+   * @param vgap the vgap to set
    */
-  public void setVerticalGap(int verticalGap) {
-    this.verticalGap = verticalGap;
-  }
-
-  /**
-   * @return the boardInsets
-   */
-  public Insets getBoardInsets() {
-    return boardInsets;
-  }
-
-  /**
-   * @param boardInsets the boardInsets to set
-   */
-  public void setBoardInsets(Insets boardInsets) {
-    this.boardInsets = boardInsets;
+  public void setVgap(int vgap) {
+    this.vgap = vgap;
   }
 
 }

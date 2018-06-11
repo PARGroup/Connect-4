@@ -1,13 +1,8 @@
 package com.pargroup.view;
 
+import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
-import com.pargroup.model.BoardConfig;
-import com.pargroup.model.Chip;
-import com.pargroup.model.ChipColour;
-import com.pargroup.resources.ConfigsLoader;
-
-import com.pargroup.resources.TextureLoader;
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -16,41 +11,23 @@ import javafx.stage.Stage;
  * @author Rawad Aboudlal
  *
  */
-public class GameView extends Application {
+public class GameView {
 
   private static final String WINDOW_TITLE = "Connect 4";
 
-  private static Stage stage;
-  private static BorderPane root;
-  private static BoardView boardView;
+  private Stage stage;
+  private BorderPane root;
+  private BoardView boardView;
 
-  private static Board board;
+  private Board board;
 
-  public static void show(Board board) {
-
-    GameView.board = board;
-
-    TextureLoader.loadTextures();
-
-    new Thread(new Runnable() {
-      /**
-       * @see java.lang.Runnable#run()
-       */
-      @Override
-      public void run() {
-        Application.launch(GameView.class);
-      }
-    }, "GUI Thread").start();
-
-  }
-
-  /**
-   * @see javafx.application.Application#start(javafx.stage.Stage)
-   */
-  @Override
-  public void start(Stage primaryStage) throws Exception {
+  public void show(Stage primaryStage, UIController uiController) {
 
     stage = primaryStage;
+
+    board = uiController.getGameController().getBoard();
+
+    uiController.addStage(stage);
 
     root = new BorderPane();
 
@@ -58,7 +35,7 @@ public class GameView extends Application {
 
     constructView();
 
-    // root.setPrefSize(640, 480);
+    uiController.addBoardView(boardView);
 
     stage.setScene(scene);
     stage.sizeToScene();
@@ -76,10 +53,21 @@ public class GameView extends Application {
 
     root.setCenter(boardView);
 
-    Chip mockChip = new Chip();
-    mockChip.setColour(ChipColour.RED);
-    boardView.chipPlaced(mockChip, 6, 7);
+  }
 
+  public void terminate() {
+    Platform.runLater(new Runnable() {
+
+      /**
+       * 
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+        stage.close();
+      }
+
+    });
   }
 
 }
