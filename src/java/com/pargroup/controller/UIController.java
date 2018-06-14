@@ -2,13 +2,12 @@ package com.pargroup.controller;
 
 import com.pargroup.event.ChipPlacedEvent;
 import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.ResolutionEvent;
 import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
-import com.pargroup.event.ResolutionEvent;
 import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
-import com.pargroup.resources.TextureLoader;
 import com.pargroup.view.BoardView;
 import com.pargroup.view.GameView;
 import javafx.application.Platform;
@@ -47,8 +46,6 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
 
     gameController.getEventManager().addResolutionListener(ChipPlacedEvent.class, this);
     gameController.getEventManager().addResolutionListener(StopGameEvent.class, this);
-
-    TextureLoader.loadTextures();
 
   }
 

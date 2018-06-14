@@ -6,7 +6,22 @@ package com.pargroup.model;
  */
 public class Chip {
 
+  private Player owner;
   private ChipColour colour;
+
+  /**
+   * @return the owner
+   */
+  public Player getOwner() {
+    return owner;
+  }
+
+  /**
+   * @param owner the owner to set
+   */
+  public void setOwner(Player owner) {
+    this.owner = owner;
+  }
 
   /**
    * @return the colour

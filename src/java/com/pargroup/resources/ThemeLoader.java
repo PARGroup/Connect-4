@@ -13,7 +13,7 @@ public class ThemeLoader {
 
   public static Theme getDefaultTheme() {
 
-    ChipColour[] chipColours = new ChipColour[] {ChipColour.RED, ChipColour.BLUE,};
+    ChipColour[] chipColours = new ChipColour[] {ChipColour.RED, ChipColour.BLUE};
 
     BoardConfig boardConfig = ConfigsLoader.getBoardConfig();
 

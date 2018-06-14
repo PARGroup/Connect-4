@@ -4,7 +4,7 @@ import com.pargroup.model.Board;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
-import com.pargroup.view.animation.AnimationFactory;
+import com.pargroup.view.animation.ChipAnimationFactory;
 import com.pargroup.view.theme.Theme;
 import javafx.animation.Animation;
 import javafx.event.ActionEvent;
@@ -63,10 +63,12 @@ public class BoardView extends StackPane {
   public void chipPlaced(EventHandler<ActionEvent> onAnimationFinishedHandler, Chip chip, int x,
       int startY, int endY) {
 
+    chip.setColour(theme.getChipColours()[chip.getOwner().getTurnIndex()]);
+
     ChipView chipView = new ChipView(chip);
 
-    Animation chipPlacementAnimation =
-        AnimationFactory.createAnimation(theme.getChipPlacementAnimation());
+    Animation chipPlacementAnimation = ChipAnimationFactory
+        .createAnimation(theme.getChipPlacementAnimation(), chipView, x, startY, endY);
 
     chipPlacementAnimation.setOnFinished(onAnimationFinishedHandler);
 

@@ -1,21 +1,21 @@
 package com.pargroup.view.animation;
 
 import java.util.HashMap;
+import com.pargroup.view.ChipView;
 import javafx.animation.Animation;
-import javafx.scene.Node;
 
 /**
  * @author Rawad Aboudlal
  *
  */
-public abstract class AnimationFactory {
+public abstract class ChipAnimationFactory {
 
-  private static final HashMap<String, AnimationFactory> FACTORIES =
-      new HashMap<String, AnimationFactory>();
+  private static final HashMap<String, ChipAnimationFactory> FACTORIES =
+      new HashMap<String, ChipAnimationFactory>();
 
   private final String key;
 
-  private Node node;
+  private ChipView chipView;
 
   private int x;
 
@@ -25,7 +25,7 @@ public abstract class AnimationFactory {
   /**
    * @param key
    */
-  public AnimationFactory(String key) {
+  public ChipAnimationFactory(String key) {
     super();
 
     this.key = key;
@@ -34,8 +34,18 @@ public abstract class AnimationFactory {
 
   }
 
-  public static Animation createAnimation(String key) {
-    return FACTORIES.get(key).createAnimation();
+  public static Animation createAnimation(String key, ChipView chipView, int x, int startY,
+      int endY) {
+
+    ChipAnimationFactory animationFactory = FACTORIES.get(key);
+
+    animationFactory.setChipView(chipView);
+    animationFactory.setX(x);
+    animationFactory.setStartY(startY);
+    animationFactory.setEndY(endY);
+
+    return animationFactory.createAnimation();
+
   }
 
   protected abstract Animation createAnimation();
@@ -48,17 +58,17 @@ public abstract class AnimationFactory {
   }
 
   /**
-   * @return the node
+   * @return the chipView
    */
-  public Node getNode() {
-    return node;
+  public ChipView getChipView() {
+    return chipView;
   }
 
   /**
-   * @param node the node to set
+   * @param chipView the chipView to set
    */
-  public void setNode(Node node) {
-    this.node = node;
+  public void setChipView(ChipView chipView) {
+    this.chipView = chipView;
   }
 
   /**

@@ -8,7 +8,7 @@ import javafx.util.Duration;
  * @author Rawad Aboudlal
  *
  */
-public class DropAnimationFactory extends AnimationFactory {
+public class DropAnimationFactory extends ChipAnimationFactory {
 
   public static final String KEY = "DropAnimationFactory";
 
@@ -20,13 +20,13 @@ public class DropAnimationFactory extends AnimationFactory {
   }
 
   /**
-   * @see com.pargroup.view.animation.AnimationFactory#createAnimation()
+   * @see com.pargroup.view.animation.ChipAnimationFactory#createAnimation()
    */
   @Override
   protected Animation createAnimation() {
 
     TranslateTransition chipPlacedAnimation =
-        new TranslateTransition(Duration.millis(100), getNode());
+        new TranslateTransition(Duration.millis(100), getChipView());
 
     chipPlacedAnimation.setFromX(getX());
     chipPlacedAnimation.setFromY(getStartY());

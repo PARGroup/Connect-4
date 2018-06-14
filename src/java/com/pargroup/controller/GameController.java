@@ -12,9 +12,7 @@ import com.pargroup.event.listener.RequestListener;
 import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
-import com.pargroup.model.ChipColour;
 import com.pargroup.model.Player;
-import com.pargroup.resources.ConfigsLoader;
 
 /**
  * @author Rawad Aboudlal
@@ -50,7 +48,7 @@ public class GameController implements RequestListener, ResolutionListener {
 
     board = new Board();
 
-    players = new Player[] {new Player(), new Player()};
+    players = new Player[] {new Player(0), new Player(1)};
 
     turn = 0;
 
@@ -110,7 +108,7 @@ public class GameController implements RequestListener, ResolutionListener {
       PlaceChipRequestEvent placeChipRequestEvent = (PlaceChipRequestEvent) e;
 
       Chip chip = new Chip();
-      // chip.setColour(currentPlayer.getChipColour());
+      chip.setOwner(currentPlayer);
 
       placeChip(chip, placeChipRequestEvent.getColumn());
 

@@ -3,6 +3,7 @@ package com.pargroup.resources;
 import java.io.InputStream;
 import java.util.HashMap;
 import com.pargroup.model.ChipColour;
+import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
 
 /**
@@ -15,13 +16,16 @@ public class TextureLoader {
 
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
-  public static void loadTextures() {
+  public static void loadTextures(Theme theme) {
 
-    TEXTURES.put(BOARD, new Image(TextureLoader.getTextureAsStream("board-trans-yellow")));
-    TEXTURES.put(ChipColour.RED.getChipName(),
-        new Image(TextureLoader.getTextureAsStream(ChipColour.RED.getChipName())));
-    TEXTURES.put(ChipColour.YELLOW.getChipName(),
-        new Image(TextureLoader.getTextureAsStream(ChipColour.YELLOW.getChipName())));
+    TEXTURES.put(BOARD, new Image(TextureLoader.getTextureAsStream(theme.getBoardTexture())));
+
+    ChipColour[] chipColours = theme.getChipColours();
+
+    for (ChipColour chipColour : chipColours) {
+      TEXTURES.put(chipColour.getChipName(),
+          new Image(TextureLoader.getTextureAsStream(chipColour.getChipName())));
+    }
 
   }
 
