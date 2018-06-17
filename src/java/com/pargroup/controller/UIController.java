@@ -9,9 +9,9 @@ import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.view.BoardView;
+import com.pargroup.view.ChipView;
 import com.pargroup.view.GameView;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -21,7 +21,7 @@ import javafx.stage.WindowEvent;
  * @author Rawad Aboudlal
  *
  */
-public class UIController implements ResolutionListener, EventHandler<ActionEvent> {
+public class UIController implements ResolutionListener {
 
   private GameController gameController;
   private GameView gameView;
@@ -136,11 +136,10 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
 
   }
 
-  /**
-   * @see javafx.event.EventHandler#handle(javafx.event.Event)
-   */
-  @Override
-  public void handle(ActionEvent event) {
+  public void onChipPlaced(ChipView chipView, int x, int y) {
+
+    chipView.setTranslateX(x);
+    chipView.setTranslateY(y);
 
     gameController.setPaused(false);
 

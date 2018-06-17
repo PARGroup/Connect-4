@@ -1,5 +1,6 @@
 package com.pargroup.view;
 
+import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
@@ -60,8 +61,7 @@ public class BoardView extends StackPane {
 
   }
 
-  public void chipPlaced(EventHandler<ActionEvent> onAnimationFinishedHandler, Chip chip, int x,
-      int startY, int endY) {
+  public void chipPlaced(UIController uiController, Chip chip, int x, int startY, int endY) {
 
     chip.setColour(theme.getChipColours()[chip.getOwner().getTurnIndex()]);
 
@@ -70,7 +70,17 @@ public class BoardView extends StackPane {
     Animation chipPlacementAnimation = ChipAnimationFactory
         .createAnimation(theme.getChipPlacementAnimation(), chipView, x, startY, endY);
 
-    chipPlacementAnimation.setOnFinished(onAnimationFinishedHandler);
+    chipPlacementAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+
+      /**
+       * @see javafx.event.EventHandler#handle(javafx.event.Event)
+       */
+      @Override
+      public void handle(ActionEvent event) {
+        uiController.onChipPlaced(chipView, x, endY);
+      }
+
+    });
 
     chipsPane.getChildren().add(chipView);
     chipPlacementAnimation.playFromStart();
