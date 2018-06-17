@@ -30,7 +30,12 @@ public abstract class ChipAnimationFactory {
 
     this.key = key;
 
-    FACTORIES.put(key, this);
+    if (getAnimationFactory(key) == null) {
+      FACTORIES.put(key, this);
+    } else {
+      System.err
+          .println("WARNING: This ChipAnimationFactory (" + key + ") has already been loaded.");
+    }
 
   }
 
@@ -49,6 +54,15 @@ public abstract class ChipAnimationFactory {
   }
 
   protected abstract Animation createAnimation();
+
+  /**
+   * 
+   * @param key
+   * @return
+   */
+  public static ChipAnimationFactory getAnimationFactory(String key) {
+    return FACTORIES.get(key);
+  }
 
   /**
    * @return the key

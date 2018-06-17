@@ -55,8 +55,10 @@ public class GameView {
 
   private void constructView() {
 
-    theme = ThemeLoader.getDefaultTheme();
     AnimationLoader.loadAnimations();
+
+    // theme = ThemeLoader.getDefaultTheme();
+    theme = ThemeLoader.getSpriteTheme();
     TextureLoader.loadTextures(theme);
 
     boardView = new BoardView(board, theme);

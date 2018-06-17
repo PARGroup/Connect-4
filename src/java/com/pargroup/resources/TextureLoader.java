@@ -18,19 +18,22 @@ public class TextureLoader {
 
   public static void loadTextures(Theme theme) {
 
-    TEXTURES.put(BOARD, new Image(TextureLoader.getTextureAsStream(theme.getBoardTexture())));
+    TextureLoader.loadTexture(BOARD, theme.getBoardTexture());
 
     ChipColour[] chipColours = theme.getChipColours();
 
     for (ChipColour chipColour : chipColours) {
-      TEXTURES.put(chipColour.getChipName(),
-          new Image(TextureLoader.getTextureAsStream(chipColour.getChipName())));
+      TextureLoader.loadTexture(chipColour.getChipName(), chipColour.getChipName());
     }
 
   }
 
-  private static InputStream getTextureAsStream(String name) {
-    return TextureLoader.class.getClassLoader().getResourceAsStream(name + ".png");
+  private static void loadTexture(String key, String name) {
+    TEXTURES.put(key, new Image(TextureLoader.getTextureAsStream(name, "png")));
+  }
+
+  private static InputStream getTextureAsStream(String name, String extension) {
+    return TextureLoader.class.getClassLoader().getResourceAsStream(name + "." + extension);
   }
 
   public static Image getTexture(String key) {
