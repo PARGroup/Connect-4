@@ -8,36 +8,27 @@ import javafx.util.Duration;
  */
 public class Sprite {
 
-  private final Duration duration;
+  private Duration duration;
 
-  private final int numberOfFrames;
+  private int numberOfFrames;
 
-  private final int columns;
+  private int columns;
 
-  private final int cellWidth;
-  private final int cellHeight;
-
-  /**
-   * @param duration
-   * @param numberOfFrames
-   * @param columns
-   * @param cellWidth
-   * @param cellHeight
-   */
-  public Sprite(Duration duration, int numberOfFrames, int columns, int cellWidth, int cellHeight) {
-    super();
-    this.duration = duration;
-    this.numberOfFrames = numberOfFrames;
-    this.columns = columns;
-    this.cellWidth = cellWidth;
-    this.cellHeight = cellHeight;
-  }
+  private int cellWidth;
+  private int cellHeight;
 
   /**
    * @return the duration
    */
   public Duration getDuration() {
     return duration;
+  }
+
+  /**
+   * @param duration the duration to set
+   */
+  public void setDuration(Duration duration) {
+    this.duration = duration;
   }
 
   /**
@@ -48,10 +39,24 @@ public class Sprite {
   }
 
   /**
+   * @param numberOfFrames the numberOfFrames to set
+   */
+  public void setNumberOfFrames(int numberOfFrames) {
+    this.numberOfFrames = numberOfFrames;
+  }
+
+  /**
    * @return the columns
    */
   public int getColumns() {
     return columns;
+  }
+
+  /**
+   * @param columns the columns to set
+   */
+  public void setColumns(int columns) {
+    this.columns = columns;
   }
 
   /**
@@ -62,10 +67,24 @@ public class Sprite {
   }
 
   /**
+   * @param cellWidth the cellWidth to set
+   */
+  public void setCellWidth(int cellWidth) {
+    this.cellWidth = cellWidth;
+  }
+
+  /**
    * @return the cellHeight
    */
   public int getCellHeight() {
     return cellHeight;
+  }
+
+  /**
+   * @param cellHeight the cellHeight to set
+   */
+  public void setCellHeight(int cellHeight) {
+    this.cellHeight = cellHeight;
   }
 
 }
