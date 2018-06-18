@@ -1,56 +1,54 @@
 package com.pargroup.model;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 /**
  * @author Rawad Aboudlal
  *
  */
 public class Board {
 
-  private final int width = 7;
-  private final int height = 6;
+  private final BoardConfig boardConfig;
 
-  private LinkedList<Chip>[] chips;
+  private Chip[][] chips;
 
   /**
-   * 
+   * @param boardConfig
    */
-  @SuppressWarnings("unchecked")
-  public Board() {
+  public Board(BoardConfig boardConfig) {
     super();
 
-    chips = new LinkedList[width];
+    this.boardConfig = boardConfig;
 
-    for (int i = 0; i < width; i++) {
-      chips[i] = new LinkedList<Chip>();
-    }
+    chips = new Chip[boardConfig.getRows()][boardConfig.getColumns()];
 
   }
 
   public void clear() {
-    for (LinkedList<Chip> col : chips) {
-      col.clear();
+
+    for (int i = 0; i < chips.length; i++) {
+
+      Chip[] row = chips[i];
+
+      for (int j = 0; j < row.length; j++) {
+        row[j] = null;
+      }
+
     }
-  }
 
-  public Iterator<Chip> iterator(int column) {
-    return chips[column].iterator();
   }
 
   /**
-   * @return the width
+   * @return the boardConfig
    */
-  public int getWidth() {
-    return width;
+  public BoardConfig getBoardConfig() {
+    return boardConfig;
+
   }
 
   /**
-   * @return the height
+   * @return the chips
    */
-  public int getHeight() {
-    return height;
+  public Chip[][] getChips() {
+    return chips;
   }
 
 }
