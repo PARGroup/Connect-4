@@ -13,6 +13,7 @@ import com.pargroup.view.ChipView;
 import com.pargroup.view.GameView;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -111,11 +112,13 @@ public class UIController implements ResolutionListener {
           @Override
           public void handle(MouseEvent event) {
 
-            int x = (int) event.getX();
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+              int x = (int) event.getX();
 
-            int column = x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
+              int column = x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
 
-            gameController.getEventManager().addEvent(new PlaceChipRequestEvent(column));
+              gameController.getEventManager().addEvent(new PlaceChipRequestEvent(column));
+            }
 
           }
         });
