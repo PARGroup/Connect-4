@@ -35,7 +35,6 @@ public class GameController implements RequestListener, ResolutionListener {
   private long prevTime;
 
   private boolean running;
-  private boolean paused;
 
   public void initialize() {
 
@@ -55,7 +54,6 @@ public class GameController implements RequestListener, ResolutionListener {
     currentPlayer = players[0];
 
     running = true;
-    paused = false;
 
     Thread gameThread = new Thread(new Runnable() {
       /**
@@ -91,9 +89,7 @@ public class GameController implements RequestListener, ResolutionListener {
 
   private synchronized void tick() {
 
-    if (!paused) {
-      eventManager.processEvents();
-    }
+    eventManager.processEvents();
 
   }
 
@@ -159,13 +155,6 @@ public class GameController implements RequestListener, ResolutionListener {
 
   public void terminate() {
     running = false;
-  }
-
-  /**
-   * @param paused the paused to set
-   */
-  public void setPaused(boolean paused) {
-    this.paused = paused;
   }
 
   /**

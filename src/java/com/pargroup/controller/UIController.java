@@ -63,6 +63,8 @@ public class UIController implements ResolutionListener {
 
     if (e instanceof ChipPlacedEvent) {
 
+      gameController.getEventManager().blockEvent(PlaceChipRequestEvent.class);
+
       ChipPlacedEvent chipPlacedEvent = (ChipPlacedEvent) e;
 
       Chip chip = chipPlacedEvent.getChip();
@@ -78,8 +80,6 @@ public class UIController implements ResolutionListener {
       final int y = -boardConfig.getVgap() / 2;
       final int endY =
           row * (boardConfig.getChipRadius() * 2 + boardConfig.getVgap()) + boardConfig.getVgap();
-
-      gameController.setPaused(true);
 
       Platform.runLater(new Runnable() {
         /**
@@ -144,7 +144,7 @@ public class UIController implements ResolutionListener {
     chipView.setTranslateX(x);
     chipView.setTranslateY(y);
 
-    gameController.setPaused(false);
+    gameController.getEventManager().unblockEvent(PlaceChipRequestEvent.class);
 
   }
 

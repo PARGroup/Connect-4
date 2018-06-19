@@ -36,7 +36,7 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
     ParallelTransition animation = new ParallelTransition();
 
     TranslateTransition placementTransition =
-        new TranslateTransition(Duration.millis(1), getChipView());
+        new TranslateTransition(Duration.millis(0), getChipView());
 
     placementTransition.setFromX(getX());
     placementTransition.setToX(getX());
