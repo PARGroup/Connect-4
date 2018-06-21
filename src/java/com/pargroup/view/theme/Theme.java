@@ -1,6 +1,7 @@
 package com.pargroup.view.theme;
 
 import com.pargroup.model.BoardConfig;
+import com.pargroup.view.animation.Sprite;
 
 /**
  * @author Rawad Aboudlal
@@ -16,6 +17,8 @@ public class Theme {
   private String boardTexture;
 
   private BoardConfig boardConfig;
+
+  private Sprite sprite;
 
   /**
    * @return the chipColours
@@ -85,6 +88,20 @@ public class Theme {
    */
   public void setBoardConfig(BoardConfig boardConfig) {
     this.boardConfig = boardConfig;
+  }
+
+  /**
+   * @return the sprite
+   */
+  public Sprite getSprite() {
+    return sprite;
+  }
+
+  /**
+   * @param sprite the sprite to set
+   */
+  public void setSprite(Sprite sprite) {
+    this.sprite = sprite;
   }
 
 }

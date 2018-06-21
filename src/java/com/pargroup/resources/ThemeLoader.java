@@ -2,17 +2,17 @@ package com.pargroup.resources;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import com.pargroup.model.BoardConfig;
-import com.pargroup.model.ChipColour;
 import com.pargroup.view.animation.ChipAnimationFactory;
-import com.pargroup.view.animation.DropAnimationFactory;
 import com.pargroup.view.animation.Sprite;
-import com.pargroup.view.animation.SpriteAnimationFactory;
 import com.pargroup.view.theme.Theme;
 import javafx.util.Duration;
 
@@ -22,25 +22,34 @@ import javafx.util.Duration;
  */
 public class ThemeLoader {
 
-  private static final String DEFAULT_THEME = "default";
+  public static final String DEFAULT_THEME = "default";
+  public static final String PENCIL_THEME = "pencil_theme";
 
   private static final String THEME_FILE = "theme.txt";
 
   private static final String DATA_SEPARATOR = "=";
 
+  private static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
+
   /**
    * Use this method to load built-in themes.
    */
   public static void loadThemes() {
-    ThemeLoader.loadThemes(Paths.get("themes/"));
+
+    ThemeLoader.loadThemes(Paths.get("src/resources/themes/"));
+
   }
 
   public static void loadThemes(Path pathToThemes) {
 
-    File themesFolder = new File(pathToThemes.toUri());
+    File themesFolder = pathToThemes.toFile();
 
     for (File themeFolder : themesFolder.listFiles()) {
-      ThemeLoader.loadTheme(themeFolder);
+
+      Theme theme = ThemeLoader.loadTheme(themeFolder);
+
+      TextureLoader.loadTextures(theme, themeFolder);
+
     }
 
   }
@@ -49,10 +58,12 @@ public class ThemeLoader {
 
     Theme theme = new Theme();
     BoardConfig boardConfig = new BoardConfig();
+    Sprite sprite = new Sprite();
 
+    theme.setChipColours(new String[2]);
     theme.setBoardConfig(boardConfig);
 
-    Sprite sprite = new Sprite();
+    theme.setSprite(sprite);
 
     Mode mode = null;
 
@@ -72,6 +83,10 @@ public class ThemeLoader {
         } else if (mode != null) {
 
           String[] data = line.split(DATA_SEPARATOR);
+
+          if (data.length < 2) {
+            continue;
+          }
 
           String key = data[0];
           String value = data[1];
@@ -95,6 +110,8 @@ public class ThemeLoader {
 
       }
 
+      THEMES.put(themeFolder.getName(), theme);
+
     } catch (IOException ex) {
       System.err.println("An error occured while loading the following theme: " + themeFolder);
     }
@@ -105,49 +122,79 @@ public class ThemeLoader {
 
   private static void parseTextureLine(Theme theme, String key, String value) {
 
+    if (key.equals("board")) {
+      theme.setBoardTexture(value);
+    } else if (key.equals("background")) {
+      theme.setBackgroundTexture(value);
+    } else if (key.equals("chip1")) {
+      theme.getChipColours()[0] = value;
+    } else if (key.equals("chip2")) {
+      theme.getChipColours()[1] = value;
+    } else if (key.equals("animation factory")) {
+      theme.setChipPlacementAnimation(value);
+    }
+
   }
 
   private static void parseBoardConfigLine(BoardConfig boardConfig, String key, String value) {
+
+    int intValue = Integer.parseInt(value);
+
+    if (key.equals("columns")) {
+      boardConfig.setColumns(intValue);
+    } else if (key.equals("rows")) {
+      boardConfig.setRows(intValue);
+    } else if (key.equals("boardWidth")) {
+      boardConfig.setBoardWidth(intValue);
+    } else if (key.equals("boardHeight")) {
+      boardConfig.setBoardHeight(intValue);
+    } else if (key.equals("chipRadius")) {
+      boardConfig.setChipRadius(intValue);
+    } else if (key.equals("chipWidth")) {
+      boardConfig.setChipWidth(intValue);
+    } else if (key.equals("chipHeight")) {
+      boardConfig.setChipHeight(intValue);
+    } else if (key.equals("hgap")) {
+      boardConfig.setHgap(intValue);
+    } else if (key.equals("vgap")) {
+      boardConfig.setVgap(intValue);
+    }
 
   }
 
   private static void parseSpriteLine(Sprite sprite, String key, String value) {
 
+    if (key.equals("duration")) {
+      sprite.setDuration(Duration.valueOf(value));
+      return;
+    }
+
+    int intValue = Integer.parseInt(value);
+
+    if (key.equals("numberOfFrames")) {
+      sprite.setNumberOfFrames(intValue);
+    } else if (key.equals("columns")) {
+      sprite.setColumns(intValue);
+    } else if (key.equals("cellWidth")) {
+      sprite.setCellWidth(intValue);
+    } else if (key.equals("cellHeight")) {
+      sprite.setCellHeight(intValue);
+    }
+
   }
 
-  private static InputStream getThemeFileInputStream(File folder) {
-    return ThemeLoader.class.getClassLoader()
-        .getResourceAsStream(Paths.get(folder.getPath()).resolve(THEME_FILE).toString());
+  private static InputStream getThemeFileInputStream(File folder) throws FileNotFoundException {
+    return new FileInputStream(folder.toPath().resolve(THEME_FILE).toFile());
   }
 
-  public static Theme getDefaultTheme() {
-
-    String[] chipColours =
-        new String[] {ChipColour.RED.getChipName(), ChipColour.BLUE.getChipName()};
-
-    BoardConfig boardConfig = ConfigsLoader.getBoardConfig();
-
-    return new Theme(chipColours, DropAnimationFactory.KEY, "", "board-trans-yellow", boardConfig);
-
-  }
-
-  public static Theme getSpriteTheme() {
-
-    String[] chipColours =
-        new String[] {ChipColour.RED_SPRITE.getChipName(), ChipColour.BLUE_SPRITE.getChipName()};
-
-    BoardConfig boardConfig = ConfigsLoader.getBoardConfig();
-
-    // SpriteLoader maybe? We need to get these values from the file somehow.
-    // For Duration we can use toString() and valueOf()
-    Sprite sprite = new Sprite(Duration.millis(1000), 8, 3, 64, 64);
-
-    ((SpriteAnimationFactory) ChipAnimationFactory.getAnimationFactory(SpriteAnimationFactory.KEY))
-        .setSprite(sprite);
-
-    return new Theme(chipColours, SpriteAnimationFactory.KEY, "", "board-trans-yellow",
-        boardConfig);
-
+  /**
+   * Get the Theme object associated with the specified key.
+   * 
+   * @param key
+   * @return
+   */
+  public static Theme getTheme(String key) {
+    return THEMES.get(key);
   }
 
   private static enum Mode {

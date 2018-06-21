@@ -3,7 +3,6 @@ package com.pargroup.view;
 import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
 import com.pargroup.resources.AnimationLoader;
-import com.pargroup.resources.TextureLoader;
 import com.pargroup.resources.ThemeLoader;
 import com.pargroup.view.theme.Theme;
 import javafx.application.Platform;
@@ -56,10 +55,9 @@ public class GameView {
   private void constructView() {
 
     AnimationLoader.loadAnimations();
+    ThemeLoader.loadThemes();
 
-    // theme = ThemeLoader.getDefaultTheme();
-    theme = ThemeLoader.getSpriteTheme();
-    TextureLoader.loadTextures(theme);
+    theme = ThemeLoader.getTheme(ThemeLoader.PENCIL_THEME);
 
     boardView = new BoardView(board, theme);
 
