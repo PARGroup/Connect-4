@@ -67,8 +67,8 @@ public class BoardView extends StackPane {
 
     ChipView chipView = new ChipView(chip);
 
-    Animation chipPlacementAnimation = ChipAnimationFactory
-        .createAnimation(theme.getChipPlacementAnimation(), chipView, x, startY, endY);
+    Animation chipPlacementAnimation = ChipAnimationFactory.createAnimation(
+        theme.getChipPlacementAnimation(), chipView, x, startY, endY, theme.getSprite());
 
     chipPlacementAnimation.setOnFinished(new EventHandler<ActionEvent>() {
 

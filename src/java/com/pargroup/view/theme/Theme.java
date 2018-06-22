@@ -1,8 +1,7 @@
 package com.pargroup.view.theme;
 
 import com.pargroup.model.BoardConfig;
-import com.pargroup.model.ChipColour;
-import javafx.animation.Transition;
+import com.pargroup.view.animation.Sprite;
 
 /**
  * @author Rawad Aboudlal
@@ -10,39 +9,29 @@ import javafx.animation.Transition;
  */
 public class Theme {
 
-  private final ChipColour[] chipColours;
+  private String[] chipColours;
 
-  private final String chipPlacementAnimation;
+  private String chipPlacementAnimation;
 
-  private final String backgroundTexture;
-  private final String boardTexture;
+  private String backgroundTexture;
+  private String boardTexture;
 
-  private final BoardConfig boardConfig;
+  private BoardConfig boardConfig;
 
-  /**
-   * @param chipColours
-   * @param chipPlacementAnimation
-   * @param backgroundTexture
-   * @param boardTexture
-   * @param boardConfig
-   */
-  public Theme(ChipColour[] chipColours, String chipPlacementAnimation, String backgroundTexture,
-      String boardTexture, BoardConfig boardConfig) {
-    super();
-
-    this.chipColours = chipColours;
-    this.chipPlacementAnimation = chipPlacementAnimation;
-    this.backgroundTexture = backgroundTexture;
-    this.boardTexture = boardTexture;
-    this.boardConfig = boardConfig;
-
-  }
+  private Sprite sprite;
 
   /**
    * @return the chipColours
    */
-  public ChipColour[] getChipColours() {
+  public String[] getChipColours() {
     return chipColours;
+  }
+
+  /**
+   * @param chipColours the chipColours to set
+   */
+  public void setChipColours(String[] chipColours) {
+    this.chipColours = chipColours;
   }
 
   /**
@@ -53,10 +42,24 @@ public class Theme {
   }
 
   /**
+   * @param chipPlacementAnimation the chipPlacementAnimation to set
+   */
+  public void setChipPlacementAnimation(String chipPlacementAnimation) {
+    this.chipPlacementAnimation = chipPlacementAnimation;
+  }
+
+  /**
    * @return the backgroundTexture
    */
   public String getBackgroundTexture() {
     return backgroundTexture;
+  }
+
+  /**
+   * @param backgroundTexture the backgroundTexture to set
+   */
+  public void setBackgroundTexture(String backgroundTexture) {
+    this.backgroundTexture = backgroundTexture;
   }
 
   /**
@@ -67,10 +70,38 @@ public class Theme {
   }
 
   /**
+   * @param boardTexture the boardTexture to set
+   */
+  public void setBoardTexture(String boardTexture) {
+    this.boardTexture = boardTexture;
+  }
+
+  /**
    * @return the boardConfig
    */
   public BoardConfig getBoardConfig() {
     return boardConfig;
+  }
+
+  /**
+   * @param boardConfig the boardConfig to set
+   */
+  public void setBoardConfig(BoardConfig boardConfig) {
+    this.boardConfig = boardConfig;
+  }
+
+  /**
+   * @return the sprite
+   */
+  public Sprite getSprite() {
+    return sprite;
+  }
+
+  /**
+   * @param sprite the sprite to set
+   */
+  public void setSprite(Sprite sprite) {
+    this.sprite = sprite;
   }
 
 }

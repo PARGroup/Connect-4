@@ -20,7 +20,7 @@ public class ChipView extends ImageView {
 
     this.chip = chip;
 
-    this.setImage(TextureLoader.getTexture(chip.getColour().getChipName()));
+    this.setImage(TextureLoader.getTexture(chip.getColour()));
 
   }
 

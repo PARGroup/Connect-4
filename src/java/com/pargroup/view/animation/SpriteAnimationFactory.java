@@ -16,8 +16,6 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
 
   public static final String KEY = "SpriteAnimationFactory";
 
-  private Sprite sprite;
-
   private String pencilTexture;
 
   /**
@@ -43,7 +41,7 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
     placementTransition.setFromY(getStartY());
     placementTransition.setToY(getEndY());
 
-    if (sprite == null) {
+    if (getSprite() == null) {
       System.err.println(
           "The sprite to be used with this SpriteAnimationFactory has not been specified.");
     } else {
@@ -106,20 +104,6 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
 
     }
 
-  }
-
-  /**
-   * @return the sprite
-   */
-  public Sprite getSprite() {
-    return sprite;
-  }
-
-  /**
-   * @param sprite the sprite to set
-   */
-  public void setSprite(Sprite sprite) {
-    this.sprite = sprite;
   }
 
   /**

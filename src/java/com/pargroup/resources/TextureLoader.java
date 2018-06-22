@@ -1,8 +1,9 @@
 package com.pargroup.resources;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
-import com.pargroup.model.ChipColour;
 import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
 
@@ -12,28 +13,39 @@ import javafx.scene.image.Image;
  */
 public class TextureLoader {
 
+  public static final String BACKGROUND = "background";
   public static final String BOARD = "board";
 
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
-  public static void loadTextures(Theme theme) {
+  public static void loadTextures(Theme theme, File themeFolder) {
 
-    TextureLoader.loadTexture(BOARD, theme.getBoardTexture());
+    TextureLoader.loadTexture(BACKGROUND, theme.getBackgroundTexture(), themeFolder);
+    TextureLoader.loadTexture(BOARD, theme.getBoardTexture(), themeFolder);
 
-    ChipColour[] chipColours = theme.getChipColours();
+    String[] chipColours = theme.getChipColours();
 
-    for (ChipColour chipColour : chipColours) {
-      TextureLoader.loadTexture(chipColour.getChipName(), chipColour.getChipName());
+    for (String chipColour : chipColours) {
+      TextureLoader.loadTexture(chipColour, chipColour, themeFolder);
     }
 
   }
 
-  private static void loadTexture(String key, String name) {
-    TEXTURES.put(key, new Image(TextureLoader.getTextureAsStream(name, "png")));
-  }
+  private static void loadTexture(String key, String name, File folder) {
 
-  private static InputStream getTextureAsStream(String name, String extension) {
-    return TextureLoader.class.getClassLoader().getResourceAsStream(name + "." + extension);
+    if (name == null) {
+      System.out.printf("The texture with key \"%s\" is null and will not be loaded.\n", key);
+      return;
+    }
+
+    try {
+
+      TEXTURES.put(key, new Image(new FileInputStream(folder.toPath().resolve(name).toFile())));
+
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+
   }
 
   public static Image getTexture(String key) {
