@@ -18,6 +18,22 @@ public class TextureLoader {
 
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
+  public static void parseTextureLine(Theme theme, String key, String value) {
+
+    if (key.equals("board")) {
+      theme.setBoardTexture(value);
+    } else if (key.equals("background")) {
+      theme.setBackgroundTexture(value);
+    } else if (key.equals("chip1")) {
+      theme.getChipColours()[0] = value;
+    } else if (key.equals("chip2")) {
+      theme.getChipColours()[1] = value;
+    } else if (key.equals("animation factory")) {
+      theme.setChipPlacementAnimation(value);
+    }
+
+  }
+
   public static void loadTextures(Theme theme, File themeFolder) {
 
     TextureLoader.loadTexture(BACKGROUND, theme.getBackgroundTexture(), themeFolder);
@@ -34,7 +50,7 @@ public class TextureLoader {
   private static void loadTexture(String key, String name, File folder) {
 
     if (name == null) {
-      System.out.printf("The texture with key \"%s\" is null and will not be loaded.\n", key);
+      System.out.printf("The texture with key \"%s\" is null and will not be loaded.%n", key);
       return;
     }
 

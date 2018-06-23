@@ -11,10 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import com.pargroup.model.BoardConfig;
-import com.pargroup.view.animation.ChipAnimationFactory;
 import com.pargroup.view.animation.Sprite;
 import com.pargroup.view.theme.Theme;
-import javafx.util.Duration;
 
 /**
  * @author Rawad Aboudlal
@@ -93,13 +91,13 @@ public class ThemeLoader {
 
           switch (mode) {
             case TEXTURES:
-              ThemeLoader.parseTextureLine(theme, key, value);
+              TextureLoader.parseTextureLine(theme, key, value);
               break;
             case BOARD_CONFIG:
-              ThemeLoader.parseBoardConfigLine(boardConfig, key, value);
+              BoardConfigLoader.parseBoardConfigLine(boardConfig, key, value);
               break;
             case SPRITE:
-              ThemeLoader.parseSpriteLine(sprite, key, value);
+              SpriteLoader.parseSpriteLine(sprite, key, value);
               break;
           }
 
@@ -114,72 +112,10 @@ public class ThemeLoader {
 
     } catch (IOException ex) {
       System.err.println("An error occured while loading the following theme: " + themeFolder);
+      ex.printStackTrace();
     }
 
     return theme;
-
-  }
-
-  private static void parseTextureLine(Theme theme, String key, String value) {
-
-    if (key.equals("board")) {
-      theme.setBoardTexture(value);
-    } else if (key.equals("background")) {
-      theme.setBackgroundTexture(value);
-    } else if (key.equals("chip1")) {
-      theme.getChipColours()[0] = value;
-    } else if (key.equals("chip2")) {
-      theme.getChipColours()[1] = value;
-    } else if (key.equals("animation factory")) {
-      theme.setChipPlacementAnimation(value);
-    }
-
-  }
-
-  private static void parseBoardConfigLine(BoardConfig boardConfig, String key, String value) {
-
-    int intValue = Integer.parseInt(value);
-
-    if (key.equals("columns")) {
-      boardConfig.setColumns(intValue);
-    } else if (key.equals("rows")) {
-      boardConfig.setRows(intValue);
-    } else if (key.equals("boardWidth")) {
-      boardConfig.setBoardWidth(intValue);
-    } else if (key.equals("boardHeight")) {
-      boardConfig.setBoardHeight(intValue);
-    } else if (key.equals("chipRadius")) {
-      boardConfig.setChipRadius(intValue);
-    } else if (key.equals("chipWidth")) {
-      boardConfig.setChipWidth(intValue);
-    } else if (key.equals("chipHeight")) {
-      boardConfig.setChipHeight(intValue);
-    } else if (key.equals("hgap")) {
-      boardConfig.setHgap(intValue);
-    } else if (key.equals("vgap")) {
-      boardConfig.setVgap(intValue);
-    }
-
-  }
-
-  private static void parseSpriteLine(Sprite sprite, String key, String value) {
-
-    if (key.equals("duration")) {
-      sprite.setDuration(Duration.valueOf(value));
-      return;
-    }
-
-    int intValue = Integer.parseInt(value);
-
-    if (key.equals("numberOfFrames")) {
-      sprite.setNumberOfFrames(intValue);
-    } else if (key.equals("columns")) {
-      sprite.setColumns(intValue);
-    } else if (key.equals("cellWidth")) {
-      sprite.setCellWidth(intValue);
-    } else if (key.equals("cellHeight")) {
-      sprite.setCellHeight(intValue);
-    }
 
   }
 
