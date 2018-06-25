@@ -2,7 +2,6 @@ package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
-import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
 import com.pargroup.view.animation.ChipAnimationFactory;
