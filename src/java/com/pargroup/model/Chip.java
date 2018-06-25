@@ -6,19 +6,34 @@ package com.pargroup.model;
  */
 public class Chip {
 
-  private ChipColour colour;
+  private Player owner;
+  private String colour;
+
+  /**
+   * @return the owner
+   */
+  public Player getOwner() {
+    return owner;
+  }
+
+  /**
+   * @param owner the owner to set
+   */
+  public void setOwner(Player owner) {
+    this.owner = owner;
+  }
 
   /**
    * @return the colour
    */
-  public ChipColour getColour() {
+  public String getColour() {
     return colour;
   }
 
   /**
    * @param colour the colour to set
    */
-  public void setColour(ChipColour colour) {
+  public void setColour(String colour) {
     this.colour = colour;
   }
 

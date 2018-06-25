@@ -6,23 +6,23 @@ package com.pargroup.model;
  */
 public class Player {
 
-  private final ChipColour chipColour;
+  private final int turnIndex;
 
   /**
-   * @param chipColour
+   * @param turnIndex
    */
-  public Player(ChipColour chipColour) {
+  public Player(int turnIndex) {
     super();
 
-    this.chipColour = chipColour;
+    this.turnIndex = turnIndex;
 
   }
 
   /**
-   * @return the chipColour
+   * @return the turnIndex
    */
-  public ChipColour getChipColour() {
-    return chipColour;
+  public int getTurnIndex() {
+    return turnIndex;
   }
 
 }

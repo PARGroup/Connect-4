@@ -12,9 +12,7 @@ import com.pargroup.event.listener.RequestListener;
 import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
-import com.pargroup.model.ChipColour;
 import com.pargroup.model.Player;
-import com.pargroup.resources.ConfigsLoader;
 
 /**
  * @author Rawad Aboudlal
@@ -37,7 +35,6 @@ public class GameController implements RequestListener, ResolutionListener {
   private long prevTime;
 
   private boolean running;
-  private boolean paused;
 
   public void initialize() {
 
@@ -48,16 +45,15 @@ public class GameController implements RequestListener, ResolutionListener {
 
     eventManager.addResolutionListener(ChipPlacedEvent.class, this);
 
-    board = new Board(ConfigsLoader.getBoardConfig());
+    board = new Board();
 
-    players = new Player[] {new Player(ChipColour.RED), new Player(ChipColour.YELLOW)};
+    players = new Player[] {new Player(0), new Player(1)};
 
     turn = 0;
 
     currentPlayer = players[0];
 
     running = true;
-    paused = false;
 
     Thread gameThread = new Thread(new Runnable() {
       /**
@@ -93,9 +89,7 @@ public class GameController implements RequestListener, ResolutionListener {
 
   private synchronized void tick() {
 
-    if (!paused) {
-      eventManager.processEvents();
-    }
+    eventManager.processEvents();
 
   }
 
@@ -110,7 +104,7 @@ public class GameController implements RequestListener, ResolutionListener {
       PlaceChipRequestEvent placeChipRequestEvent = (PlaceChipRequestEvent) e;
 
       Chip chip = new Chip();
-      chip.setColour(currentPlayer.getChipColour());
+      chip.setOwner(currentPlayer);
 
       placeChip(chip, placeChipRequestEvent.getColumn());
 
@@ -161,13 +155,6 @@ public class GameController implements RequestListener, ResolutionListener {
 
   public void terminate() {
     running = false;
-  }
-
-  /**
-   * @param paused the paused to set
-   */
-  public void setPaused(boolean paused) {
-    this.paused = paused;
   }
 
   /**

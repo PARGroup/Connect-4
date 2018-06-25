@@ -1,0 +1,18 @@
+Textures
+board=board-trans-yellow.png
+background=
+chip1=blue_chip.png
+chip2=red_chip.png
+animation factory=DropAnimationFactory
+
+Board Config
+columns=7
+rows=6
+boardWidth=504
+boardHeight=440
+chipRadius=32
+chipWidth=64
+chipHeight=64
+hgap=8
+vgap=8
+

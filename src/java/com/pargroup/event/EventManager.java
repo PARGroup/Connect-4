@@ -1,10 +1,12 @@
 package com.pargroup.event;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import com.pargroup.event.listener.RequestListener;
+import java.util.Set;
 import com.pargroup.event.listener.Listener;
+import com.pargroup.event.listener.RequestListener;
 import com.pargroup.event.listener.ResolutionListener;
 
 /**
@@ -21,11 +23,15 @@ public class EventManager {
 
   private Queue<Event> events = new LinkedList<Event>();
 
-  public void addRequestListener(Class<? extends RequestEvent> eventClass, RequestListener listener) {
+  private Set<Class<?>> blockedEvents = new LinkedHashSet<Class<?>>();
+
+  public void addRequestListener(Class<? extends RequestEvent> eventClass,
+      RequestListener listener) {
     addGenericListener(requestEventListeners, eventClass, listener);
   }
 
-  public void addResolutionListener(Class<? extends ResolutionEvent> eventClass, ResolutionListener listener) {
+  public void addResolutionListener(Class<? extends ResolutionEvent> eventClass,
+      ResolutionListener listener) {
     addGenericListener(resolutionEventListeners, eventClass, listener);
   }
 
@@ -85,7 +91,25 @@ public class EventManager {
   }
 
   public synchronized void addEvent(Event e) {
+
+    for (Class<?> blockedEventClass : blockedEvents) {
+
+      if (e.getClass().equals(blockedEventClass)) {
+        return;
+      }
+
+    }
+
     events.add(e);
+
+  }
+
+  public void blockEvent(Class<?> eventToBlock) {
+    blockedEvents.add(eventToBlock);
+  }
+
+  public void unblockEvent(Class<?> eventToUnblock) {
+    blockedEvents.remove(eventToUnblock);
   }
 
 }
