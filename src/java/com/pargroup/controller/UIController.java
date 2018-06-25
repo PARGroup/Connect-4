@@ -2,18 +2,18 @@ package com.pargroup.controller;
 
 import com.pargroup.event.ChipPlacedEvent;
 import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.ResolutionEvent;
 import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
-import com.pargroup.event.ResolutionEvent;
 import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.BoardConfig;
 import com.pargroup.model.Chip;
-import com.pargroup.resources.TextureLoader;
 import com.pargroup.view.BoardView;
+import com.pargroup.view.ChipView;
 import com.pargroup.view.GameView;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -22,7 +22,7 @@ import javafx.stage.WindowEvent;
  * @author Rawad Aboudlal
  *
  */
-public class UIController implements ResolutionListener, EventHandler<ActionEvent> {
+public class UIController implements ResolutionListener {
 
   private GameController gameController;
   private GameView gameView;
@@ -48,8 +48,6 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
     gameController.getEventManager().addResolutionListener(ChipPlacedEvent.class, this);
     gameController.getEventManager().addResolutionListener(StopGameEvent.class, this);
 
-    TextureLoader.loadTextures();
-
   }
 
   private void terminate() {
@@ -64,6 +62,8 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
   public void onEvent(ResolutionEvent e) {
 
     if (e instanceof ChipPlacedEvent) {
+
+      gameController.getEventManager().blockEvent(PlaceChipRequestEvent.class);
 
       ChipPlacedEvent chipPlacedEvent = (ChipPlacedEvent) e;
 
@@ -80,8 +80,6 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
       final int y = -boardConfig.getVgap() / 2;
       final int endY =
           row * (boardConfig.getChipRadius() * 2 + boardConfig.getVgap()) + boardConfig.getVgap();
-
-      gameController.setPaused(true);
 
       Platform.runLater(new Runnable() {
         /**
@@ -114,11 +112,13 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
           @Override
           public void handle(MouseEvent event) {
 
-            int x = (int) event.getX();
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+              int x = (int) event.getX();
 
-            int column = x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
+              int column = x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
 
-            gameController.getEventManager().addEvent(new PlaceChipRequestEvent(column));
+              gameController.getEventManager().addEvent(new PlaceChipRequestEvent(column));
+            }
 
           }
         });
@@ -139,13 +139,12 @@ public class UIController implements ResolutionListener, EventHandler<ActionEven
 
   }
 
-  /**
-   * @see javafx.event.EventHandler#handle(javafx.event.Event)
-   */
-  @Override
-  public void handle(ActionEvent event) {
+  public void onChipPlaced(ChipView chipView, int x, int y) {
 
-    gameController.setPaused(false);
+    chipView.setTranslateX(x);
+    chipView.setTranslateY(y);
+
+    gameController.getEventManager().unblockEvent(PlaceChipRequestEvent.class);
 
   }
 

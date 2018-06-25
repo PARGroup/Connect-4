@@ -6,20 +6,27 @@ package com.pargroup.model;
  */
 public class Board {
 
-  private final BoardConfig boardConfig;
+  private static final int ROWS = 6;
+  private static final int COLUMNS = 7;
 
   private Chip[][] chips;
 
   /**
-   * @param boardConfig
+   * @param rows
+   * @param columns
    */
-  public Board(BoardConfig boardConfig) {
+  public Board(int rows, int columns) {
     super();
 
-    this.boardConfig = boardConfig;
+    chips = new Chip[rows][columns];
 
-    chips = new Chip[boardConfig.getRows()][boardConfig.getColumns()];
+  }
 
+  /**
+   * 
+   */
+  public Board() {
+    this(ROWS, COLUMNS);
   }
 
   public void clear() {
@@ -33,14 +40,6 @@ public class Board {
       }
 
     }
-
-  }
-
-  /**
-   * @return the boardConfig
-   */
-  public BoardConfig getBoardConfig() {
-    return boardConfig;
 
   }
 
