@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import com.pargroup.model.BoardConfig;
+import com.pargroup.view.BoardConfig;
 import com.pargroup.view.animation.Sprite;
 import com.pargroup.view.theme.Theme;
 

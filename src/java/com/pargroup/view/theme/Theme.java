@@ -1,6 +1,6 @@
 package com.pargroup.view.theme;
 
-import com.pargroup.model.BoardConfig;
+import com.pargroup.view.BoardConfig;
 import com.pargroup.view.animation.Sprite;
 
 /**
