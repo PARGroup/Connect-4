@@ -3,7 +3,6 @@ package com.pargroup.resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
@@ -56,11 +55,8 @@ public class TextureLoader {
 
     try {
 
-      Path folderPath = folder.toPath();
-
-      String key = folderPath.getFileName().resolve(name).toString();
-
-      TEXTURES.put(key, new Image(new FileInputStream(folder.toPath().resolve(name).toFile())));
+      TEXTURES.put(TextureLoader.createKey(name, folder),
+          new Image(new FileInputStream(folder.toPath().resolve(name).toFile())));
 
     } catch (IOException ex) {
       ex.printStackTrace();
@@ -74,11 +70,16 @@ public class TextureLoader {
       return null;
     }
 
-    String key =
-        ThemeManager.getCurrentTheme().getFolder().toPath().getFileName().resolve(name).toString();
+    return TEXTURES.get(TextureLoader.createKey(name));
 
-    return TEXTURES.get(key);
+  }
 
+  private static String createKey(String name) {
+    return TextureLoader.createKey(name, ThemeManager.getCurrentTheme().getFolder());
+  }
+
+  private static String createKey(String name, File folder) {
+    return folder.toPath().getFileName().resolve(name).toString();
   }
 
 }

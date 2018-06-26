@@ -7,12 +7,15 @@ import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
 import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Chip;
+import com.pargroup.resources.ThemeManager;
 import com.pargroup.view.BoardConfig;
 import com.pargroup.view.BoardView;
 import com.pargroup.view.ChipView;
 import com.pargroup.view.GameView;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -134,6 +137,22 @@ public class UIController implements ResolutionListener {
       @Override
       public void handle(WindowEvent event) {
         gameController.getEventManager().addEvent(new StopRequestEvent());
+      }
+    });
+
+    stage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+      /**
+       * @see javafx.event.EventHandler#handle(javafx.event.Event)
+       */
+      @Override
+      public void handle(KeyEvent event) {
+
+        if (event.getCode().equals(KeyCode.DIGIT1)) {
+          ThemeManager.setTheme(ThemeManager.DEFAULT_THEME);
+        } else if (event.getCode().equals(KeyCode.DIGIT2)) {
+          ThemeManager.setTheme(ThemeManager.PENCIL_THEME);
+        }
+
       }
     });
 

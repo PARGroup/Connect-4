@@ -55,7 +55,7 @@ public class GameView {
 
     ThemeManager.initializeThemes();
 
-    ThemeManager.setTheme(ThemeManager.DEFAULT_THEME);
+    ThemeManager.setTheme(ThemeManager.PENCIL_THEME);
 
     theme = ThemeManager.getCurrentTheme();
 
