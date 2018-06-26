@@ -2,8 +2,7 @@ package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
 import com.pargroup.model.Board;
-import com.pargroup.resources.AnimationLoader;
-import com.pargroup.resources.ThemeLoader;
+import com.pargroup.resources.ThemeManager;
 import com.pargroup.view.theme.Theme;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -54,10 +53,11 @@ public class GameView {
 
   private void constructView() {
 
-    AnimationLoader.loadAnimations();
-    ThemeLoader.loadThemes();
+    ThemeManager.initializeThemes();
 
-    theme = ThemeLoader.getTheme(ThemeLoader.PENCIL_THEME);
+    ThemeManager.setTheme(ThemeManager.DEFAULT_THEME);
+
+    theme = ThemeManager.getCurrentTheme();
 
     boardView = new BoardView(board, theme);
 

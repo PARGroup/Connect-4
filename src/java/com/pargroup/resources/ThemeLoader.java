@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import com.pargroup.view.BoardConfig;
 import com.pargroup.view.animation.Sprite;
 import com.pargroup.view.theme.Theme;
@@ -20,25 +19,20 @@ import com.pargroup.view.theme.Theme;
  */
 public class ThemeLoader {
 
-  public static final String DEFAULT_THEME = "default";
-  public static final String PENCIL_THEME = "pencil_theme";
-
   private static final String THEME_FILE = "theme.txt";
 
   private static final String DATA_SEPARATOR = "=";
 
-  private static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
-
   /**
    * Use this method to load built-in themes.
    */
-  public static void loadThemes() {
+  static void loadThemes() {
 
     ThemeLoader.loadThemes(Paths.get("src/resources/themes/"));
 
   }
 
-  public static void loadThemes(Path pathToThemes) {
+  static void loadThemes(Path pathToThemes) {
 
     File themesFolder = pathToThemes.toFile();
 
@@ -46,7 +40,7 @@ public class ThemeLoader {
 
       Theme theme = ThemeLoader.loadTheme(themeFolder);
 
-      TextureLoader.loadTextures(theme, themeFolder);
+      TextureLoader.loadTextures(theme);
 
     }
 
@@ -57,6 +51,8 @@ public class ThemeLoader {
     Theme theme = new Theme();
     BoardConfig boardConfig = new BoardConfig();
     Sprite sprite = new Sprite();
+
+    theme.setFolder(themeFolder);
 
     theme.setChipColours(new String[2]);
     theme.setBoardConfig(boardConfig);
@@ -108,7 +104,7 @@ public class ThemeLoader {
 
       }
 
-      THEMES.put(themeFolder.getName(), theme);
+      ThemeManager.addTheme(themeFolder.getName(), theme);
 
     } catch (IOException ex) {
       System.err.println("An error occured while loading the following theme: " + themeFolder);
@@ -121,16 +117,6 @@ public class ThemeLoader {
 
   private static InputStream getThemeFileInputStream(File folder) throws FileNotFoundException {
     return new FileInputStream(folder.toPath().resolve(THEME_FILE).toFile());
-  }
-
-  /**
-   * Get the Theme object associated with the specified key.
-   * 
-   * @param key
-   * @return
-   */
-  public static Theme getTheme(String key) {
-    return THEMES.get(key);
   }
 
   private static enum Mode {

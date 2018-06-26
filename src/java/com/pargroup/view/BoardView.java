@@ -40,8 +40,8 @@ public class BoardView extends StackPane {
     this.theme = theme;
     this.boardConfig = theme.getBoardConfig();
 
-    Image backgroundImage = TextureLoader.getTexture(TextureLoader.BACKGROUND);
-    Image boardImage = TextureLoader.getTexture(TextureLoader.BOARD);
+    Image backgroundImage = TextureLoader.getTexture(theme.getBackgroundTexture());
+    Image boardImage = TextureLoader.getTexture(theme.getBoardTexture());
 
     backgroundTexture = new ImageView(backgroundImage);
     chipsPane = new Pane();

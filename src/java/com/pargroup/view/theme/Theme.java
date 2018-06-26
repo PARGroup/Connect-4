@@ -1,5 +1,6 @@
 package com.pargroup.view.theme;
 
+import java.io.File;
 import com.pargroup.view.BoardConfig;
 import com.pargroup.view.animation.Sprite;
 
@@ -8,6 +9,8 @@ import com.pargroup.view.animation.Sprite;
  *
  */
 public class Theme {
+
+  private File folder;
 
   private String[] chipColours;
 
@@ -19,6 +22,20 @@ public class Theme {
   private BoardConfig boardConfig;
 
   private Sprite sprite;
+
+  /**
+   * @return the folder
+   */
+  public File getFolder() {
+    return folder;
+  }
+
+  /**
+   * @param folder the folder to set
+   */
+  public void setFolder(File folder) {
+    this.folder = folder;
+  }
 
   /**
    * @return the chipColours

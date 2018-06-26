@@ -9,7 +9,7 @@ import com.pargroup.view.animation.SpriteAnimationFactory;
  */
 public class AnimationLoader {
 
-  public static void loadAnimations() {
+  static void loadAnimations() {
 
     new DropAnimationFactory();
     new SpriteAnimationFactory();

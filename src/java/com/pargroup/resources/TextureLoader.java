@@ -3,6 +3,7 @@ package com.pargroup.resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
@@ -13,12 +14,9 @@ import javafx.scene.image.Image;
  */
 public class TextureLoader {
 
-  public static final String BACKGROUND = "background";
-  public static final String BOARD = "board";
-
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
-  public static void parseTextureLine(Theme theme, String key, String value) {
+  static void parseTextureLine(Theme theme, String key, String value) {
 
     if (key.equals("board")) {
       theme.setBoardTexture(value);
@@ -34,27 +32,33 @@ public class TextureLoader {
 
   }
 
-  public static void loadTextures(Theme theme, File themeFolder) {
+  static void loadTextures(Theme theme) {
 
-    TextureLoader.loadTexture(BACKGROUND, theme.getBackgroundTexture(), themeFolder);
-    TextureLoader.loadTexture(BOARD, theme.getBoardTexture(), themeFolder);
+    File themeFolder = theme.getFolder();
+
+    TextureLoader.loadTexture(theme.getBackgroundTexture(), themeFolder);
+    TextureLoader.loadTexture(theme.getBoardTexture(), themeFolder);
 
     String[] chipColours = theme.getChipColours();
 
     for (String chipColour : chipColours) {
-      TextureLoader.loadTexture(chipColour, chipColour, themeFolder);
+      TextureLoader.loadTexture(chipColour, themeFolder);
     }
 
   }
 
-  private static void loadTexture(String key, String name, File folder) {
+  private static void loadTexture(String name, File folder) {
 
     if (name == null) {
-      System.out.printf("The texture with key \"%s\" is null and will not be loaded.%n", key);
+      System.out.printf("The texture file \"%s\" is null and will not be loaded.%n", name);
       return;
     }
 
     try {
+
+      Path folderPath = folder.toPath();
+
+      String key = folderPath.getFileName().resolve(name).toString();
 
       TEXTURES.put(key, new Image(new FileInputStream(folder.toPath().resolve(name).toFile())));
 
@@ -64,11 +68,14 @@ public class TextureLoader {
 
   }
 
-  public static Image getTexture(String key) {
+  public static Image getTexture(String name) {
 
-    if (key == null) {
+    if (name == null) {
       return null;
     }
+
+    String key =
+        ThemeManager.getCurrentTheme().getFolder().toPath().getFileName().resolve(name).toString();
 
     return TEXTURES.get(key);
 
