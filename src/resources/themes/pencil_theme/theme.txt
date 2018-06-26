@@ -1,13 +1,11 @@
 Textures
-board=board-trans-yellow.png
-background=
-chip1=blue_chip_sprite.png
-chip2=red_chip_sprite.png
+board=Board.png
+background=background.png
+chip1=SpriteSheetBlue.png
+chip2=SpriteSheetRed.png
 animation factory=SpriteAnimationFactory
 
 Board Config
-columns=7
-rows=6
 boardWidth=504
 boardHeight=440
 chipRadius=32
@@ -18,8 +16,7 @@ vgap=8
 
 Sprite
 duration=1000ms
-numberOfFrames=8
-columns=3
+numberOfFrames=6
+columns=6
 cellWidth=64
 cellHeight=64
-

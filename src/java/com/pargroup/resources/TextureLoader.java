@@ -65,7 +65,13 @@ public class TextureLoader {
   }
 
   public static Image getTexture(String key) {
+
+    if (key == null) {
+      return null;
+    }
+
     return TEXTURES.get(key);
+
   }
 
 }
