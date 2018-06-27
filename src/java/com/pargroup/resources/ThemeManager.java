@@ -55,6 +55,14 @@ public class ThemeManager {
     THEME_CHANGE_LISTENERS.add(listener);
   }
 
+  public static boolean removeThemeChangeListener(ThemeChangeListener listener) {
+    return THEME_CHANGE_LISTENERS.remove(listener);
+  }
+
+  public static void clearThemeChangeListener() {
+    THEME_CHANGE_LISTENERS.clear();
+  }
+
   public static ChipAnimationFactory getAnimationFactory() {
     return ChipAnimationFactory.getAnimationFactory(currentTheme.getChipPlacementAnimation());
   }
