@@ -22,8 +22,6 @@ public abstract class ChipAnimationFactory {
   private int startY;
   private int endY;
 
-  private Sprite sprite;
-
   /**
    * @param key
    */
@@ -42,7 +40,7 @@ public abstract class ChipAnimationFactory {
   }
 
   public static Animation createAnimation(String key, ChipView chipView, int x, int startY,
-      int endY, Sprite sprite) {
+      int endY) {
 
     ChipAnimationFactory animationFactory = FACTORIES.get(key);
 
@@ -50,13 +48,14 @@ public abstract class ChipAnimationFactory {
     animationFactory.setX(x);
     animationFactory.setStartY(startY);
     animationFactory.setEndY(endY);
-    animationFactory.setSprite(sprite);
 
     return animationFactory.createAnimation();
 
   }
 
   protected abstract Animation createAnimation();
+
+  public abstract void resetViewport(ChipView chipView);
 
   /**
    * 
@@ -128,20 +127,6 @@ public abstract class ChipAnimationFactory {
    */
   public void setEndY(int endY) {
     this.endY = endY;
-  }
-
-  /**
-   * @return the sprite
-   */
-  public Sprite getSprite() {
-    return sprite;
-  }
-
-  /**
-   * @param sprite the sprite to set
-   */
-  public void setSprite(Sprite sprite) {
-    this.sprite = sprite;
   }
 
 }

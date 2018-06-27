@@ -147,9 +147,9 @@ public class UIController implements ResolutionListener {
       @Override
       public void handle(KeyEvent event) {
 
-        if (event.getCode().equals(KeyCode.DIGIT1)) {
+        if (event.getCode().equals(KeyCode.NUMPAD1)) {
           ThemeManager.setTheme(ThemeManager.DEFAULT_THEME);
-        } else if (event.getCode().equals(KeyCode.DIGIT2)) {
+        } else if (event.getCode().equals(KeyCode.NUMPAD2)) {
           ThemeManager.setTheme(ThemeManager.PENCIL_THEME);
         }
 

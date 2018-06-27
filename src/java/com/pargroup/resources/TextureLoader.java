@@ -15,6 +15,30 @@ public class TextureLoader {
 
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
+  public static Image getBackgroundTexture() {
+
+    String name = ThemeManager.getCurrentTheme().getBackgroundTexture();
+
+    return getTexture(name);
+
+  }
+
+  public static Image getBoardTexture() {
+
+    String name = ThemeManager.getCurrentTheme().getBoardTexture();
+
+    return getTexture(name);
+
+  }
+
+  public static Image getChipTexture(int chipIndex) {
+
+    String name = ThemeManager.getCurrentTheme().getChipColours()[chipIndex];
+
+    return getTexture(name);
+
+  }
+
   static void parseTextureLine(Theme theme, String key, String value) {
 
     if (key.equals("board")) {
@@ -64,7 +88,7 @@ public class TextureLoader {
 
   }
 
-  public static Image getTexture(String name) {
+  private static Image getTexture(String name) {
 
     if (name == null) {
       return null;
@@ -74,8 +98,22 @@ public class TextureLoader {
 
   }
 
+  private static Image getTexture(Theme theme, String name) {
+
+    if (name == null) {
+      return null;
+    }
+
+    return TEXTURES.get(TextureLoader.createKey(name, theme));
+
+  }
+
   private static String createKey(String name) {
-    return TextureLoader.createKey(name, ThemeManager.getCurrentTheme().getFolder());
+    return TextureLoader.createKey(name, ThemeManager.getCurrentTheme());
+  }
+
+  private static String createKey(String name, Theme theme) {
+    return TextureLoader.createKey(name, theme.getFolder());
   }
 
   private static String createKey(String name, File folder) {

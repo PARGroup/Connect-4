@@ -1,5 +1,6 @@
 package com.pargroup.view.animation;
 
+import com.pargroup.resources.ThemeManager;
 import com.pargroup.view.ChipView;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
@@ -41,12 +42,14 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
     placementTransition.setFromY(getStartY());
     placementTransition.setToY(getEndY());
 
-    if (getSprite() == null) {
+    Sprite sprite = ThemeManager.getCurrentTheme().getSprite();
+
+    if (sprite == null) {
       System.err.println(
           "The sprite to be used with this SpriteAnimationFactory has not been specified.");
     } else {
 
-      SpriteTransition spriteTransition = new SpriteTransition(getSprite(), getChipView());
+      SpriteTransition spriteTransition = new SpriteTransition(sprite, getChipView());
 
       animation.getChildren().add(spriteTransition);
 
@@ -55,6 +58,21 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
     animation.getChildren().add(placementTransition);
 
     return animation;
+
+  }
+
+  /**
+   * @see com.pargroup.view.animation.ChipAnimationFactory#resetViewport(com.pargroup.view.ChipView)
+   */
+  @Override
+  public void resetViewport(ChipView chipView) {
+
+    Sprite sprite = ThemeManager.getCurrentTheme().getSprite();
+
+    int x = (sprite.getNumberOfFrames() - 1) % sprite.getColumns() * sprite.getCellWidth();
+    int y = (sprite.getNumberOfFrames() - 1) / sprite.getColumns() * sprite.getCellHeight();
+
+    chipView.setViewport(new Rectangle2D(x, y, sprite.getCellWidth(), sprite.getCellHeight()));
 
   }
 

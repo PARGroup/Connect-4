@@ -1,12 +1,15 @@
 package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
+import com.pargroup.event.listener.ThemeChangeListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
+import com.pargroup.resources.ThemeManager;
 import com.pargroup.view.animation.ChipAnimationFactory;
 import com.pargroup.view.theme.Theme;
 import javafx.animation.Animation;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -18,7 +21,7 @@ import javafx.scene.layout.StackPane;
  * @author Rawad Aboudlal
  *
  */
-public class BoardView extends StackPane {
+public class BoardView extends StackPane implements ThemeChangeListener {
 
   private Board board;
   private Theme theme;
@@ -31,33 +34,25 @@ public class BoardView extends StackPane {
 
   /**
    * @param board
-   * @param theme
    */
-  public BoardView(Board board, Theme theme) {
+  public BoardView(Board board) {
     super();
 
     this.board = board;
-    this.theme = theme;
-    this.boardConfig = theme.getBoardConfig();
 
-    Image backgroundImage = TextureLoader.getTexture(theme.getBackgroundTexture());
-    Image boardImage = TextureLoader.getTexture(theme.getBoardTexture());
-
-    backgroundTexture = new ImageView(backgroundImage);
+    backgroundTexture = new ImageView();
     chipsPane = new Pane();
-    boardTexture = new ImageView(boardImage);
+    boardTexture = new ImageView();
     clickPane = new Pane();
 
-    chipsPane.maxWidthProperty().bind(boardImage.widthProperty());
-    chipsPane.maxHeightProperty().bind(boardImage.heightProperty());
-
-    clickPane.maxWidthProperty().bind(boardImage.widthProperty());
-    clickPane.maxHeightProperty().bind(boardImage.heightProperty());
+    updateTheme();
 
     getChildren().add(backgroundTexture);
     getChildren().add(chipsPane);
     getChildren().add(boardTexture);
     getChildren().add(clickPane);
+
+    ThemeManager.addThemeChangeListener(this);
 
   }
 
@@ -67,8 +62,8 @@ public class BoardView extends StackPane {
 
     ChipView chipView = new ChipView(chip);
 
-    Animation chipPlacementAnimation = ChipAnimationFactory.createAnimation(
-        theme.getChipPlacementAnimation(), chipView, x, startY, endY, theme.getSprite());
+    Animation chipPlacementAnimation = ChipAnimationFactory
+        .createAnimation(theme.getChipPlacementAnimation(), chipView, x, startY, endY);
 
     chipPlacementAnimation.setOnFinished(new EventHandler<ActionEvent>() {
 
@@ -84,6 +79,43 @@ public class BoardView extends StackPane {
 
     chipsPane.getChildren().add(chipView);
     chipPlacementAnimation.playFromStart();
+
+  }
+
+  /**
+   * @see com.pargroup.event.listener.ThemeChangeListener#onThemeChange()
+   */
+  @Override
+  public void onThemeChange() {
+
+    Platform.runLater(new Runnable() {
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+        updateTheme();
+      }
+    });
+
+  }
+
+  private void updateTheme() {
+
+    this.theme = ThemeManager.getCurrentTheme();
+    this.boardConfig = theme.getBoardConfig();
+
+    Image backgroundImage = TextureLoader.getBackgroundTexture();
+    Image boardImage = TextureLoader.getBoardTexture();
+
+    backgroundTexture.setImage(backgroundImage);
+    boardTexture.setImage(boardImage);
+
+    chipsPane.maxWidthProperty().bind(boardImage.widthProperty());
+    chipsPane.maxHeightProperty().bind(boardImage.heightProperty());
+
+    clickPane.maxWidthProperty().bind(boardImage.widthProperty());
+    clickPane.maxHeightProperty().bind(boardImage.heightProperty());
 
   }
 
