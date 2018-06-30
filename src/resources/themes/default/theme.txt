@@ -1,8 +1,7 @@
 Textures
 board=board-trans-yellow.png
 background=
-chip1=blue_chip.png
-chip2=red_chip.png
+chips=blue_chip.png, red_chip.png
 animation factory=DropAnimationFactory
 
 Board Config

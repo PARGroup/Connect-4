@@ -1,8 +1,7 @@
 Textures
 board=Board.png
 background=background.png
-chip1=SpriteSheetBlue.png
-chip2=SpriteSheetRed.png
+chips=SpriteSheetBlue.png, SpriteSheetRed.png
 animation factory=SpriteAnimationFactory
 
 Board Config
