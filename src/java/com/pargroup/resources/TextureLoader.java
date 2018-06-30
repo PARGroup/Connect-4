@@ -3,6 +3,8 @@ package com.pargroup.resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,10 +57,14 @@ public class TextureLoader {
 
       Matcher matcher = CHIP_TEXTURE_PATTERN.matcher(value);
 
+      theme.setChipColours(new ArrayList<String>());
+
       while (matcher.find()) {
         String chipTexture = matcher.group("texture");
         theme.getChipColours().add(chipTexture);
       }
+
+      theme.setChipColours(Collections.unmodifiableList(theme.getChipColours()));
 
     }
 
