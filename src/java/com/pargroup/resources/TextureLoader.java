@@ -51,8 +51,6 @@ public class TextureLoader {
       theme.setBoardTexture(value);
     } else if (key.equals("background")) {
       theme.setBackgroundTexture(value);
-    } else if (key.equals("animation factory")) {
-      theme.setChipPlacementAnimation(value);
     } else if (key.equals("chips")) {
 
       Matcher matcher = CHIP_TEXTURE_PATTERN.matcher(value);

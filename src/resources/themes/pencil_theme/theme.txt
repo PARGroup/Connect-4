@@ -1,8 +1,10 @@
+General
+animation factory=com.pargroup.animation.SpriteAnimationFactory
+
 Textures
 board=Board.png
 background=background.png
 chips=SpriteSheetBlue.png, SpriteSheetRed.png
-animation factory=SpriteAnimationFactory
 
 Board Config
 boardWidth=504

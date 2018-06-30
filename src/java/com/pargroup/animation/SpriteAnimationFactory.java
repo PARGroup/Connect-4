@@ -1,4 +1,4 @@
-package com.pargroup.view.animation;
+package com.pargroup.animation;
 
 import com.pargroup.resources.ThemeManager;
 import com.pargroup.view.ChipView;
@@ -15,42 +15,28 @@ import javafx.util.Duration;
  */
 public class SpriteAnimationFactory extends ChipAnimationFactory {
 
-  public static final String KEY = "SpriteAnimationFactory";
-
-  private String pencilTexture;
-
   /**
-   * 
-   */
-  public SpriteAnimationFactory() {
-    super(KEY);
-  }
-
-  /**
-   * @see com.pargroup.view.animation.ChipAnimationFactory#createAnimation()
+   * @see com.pargroup.animation.ChipAnimationFactory#createAnimation()
    */
   @Override
-  protected Animation createAnimation() {
+  public Animation createAnimation(ChipView chipView, int x, int startY, int endY) {
 
     ParallelTransition animation = new ParallelTransition();
 
-    TranslateTransition placementTransition =
-        new TranslateTransition(Duration.millis(0), getChipView());
+    TranslateTransition placementTransition = new TranslateTransition(Duration.millis(0), chipView);
 
-    placementTransition.setFromX(getX());
-    placementTransition.setToX(getX());
-    placementTransition.setFromY(getStartY());
-    placementTransition.setToY(getEndY());
+    placementTransition.setFromX(x);
+    placementTransition.setToX(x);
+    placementTransition.setFromY(startY);
+    placementTransition.setToY(endY);
 
     Sprite sprite = ThemeManager.getCurrentTheme().getSprite();
 
     if (sprite == null) {
-      System.err.println(
-          "The sprite to be used with this SpriteAnimationFactory has not been specified.");
+      System.err.println("The sprite for this SpriteAnimationFactory was not set.");
     } else {
 
-      SpriteTransition spriteTransition = new SpriteTransition(sprite, getChipView());
-
+      SpriteTransition spriteTransition = new SpriteTransition(sprite, chipView);
       animation.getChildren().add(spriteTransition);
 
     }
@@ -62,7 +48,7 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
   }
 
   /**
-   * @see com.pargroup.view.animation.ChipAnimationFactory#resetViewport(com.pargroup.view.ChipView)
+   * @see com.pargroup.animation.ChipAnimationFactory#resetViewport(com.pargroup.view.ChipView)
    */
   @Override
   public void resetViewport(ChipView chipView) {
@@ -122,20 +108,6 @@ public class SpriteAnimationFactory extends ChipAnimationFactory {
 
     }
 
-  }
-
-  /**
-   * @return the pencilTexture
-   */
-  public String getPencilTexture() {
-    return pencilTexture;
-  }
-
-  /**
-   * @param pencilTexture the pencilTexture to set
-   */
-  public void setPencilTexture(String pencilTexture) {
-    this.pencilTexture = pencilTexture;
   }
 
 }

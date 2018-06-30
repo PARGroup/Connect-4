@@ -6,7 +6,6 @@ import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
 import com.pargroup.resources.ThemeManager;
-import com.pargroup.view.animation.ChipAnimationFactory;
 import com.pargroup.view.theme.Theme;
 import javafx.animation.Animation;
 import javafx.application.Platform;
@@ -60,8 +59,8 @@ public class BoardView extends StackPane implements ThemeChangeListener {
 
     ChipView chipView = new ChipView(chip);
 
-    Animation chipPlacementAnimation = ChipAnimationFactory
-        .createAnimation(theme.getChipPlacementAnimation(), chipView, x, startY, endY);
+    Animation chipPlacementAnimation =
+        ThemeManager.getAnimationFactory().createAnimation(chipView, x, startY, endY);
 
     chipPlacementAnimation.setOnFinished(new EventHandler<ActionEvent>() {
 

@@ -2,8 +2,9 @@ package com.pargroup.view.theme;
 
 import java.io.File;
 import java.util.List;
+import com.pargroup.animation.ChipAnimationFactory;
+import com.pargroup.animation.Sprite;
 import com.pargroup.view.BoardConfig;
-import com.pargroup.view.animation.Sprite;
 
 /**
  * @author Rawad Aboudlal
@@ -15,7 +16,7 @@ public class Theme {
 
   private List<String> chipColours;
 
-  private String chipPlacementAnimation;
+  private ChipAnimationFactory chipPlacementAnimation;
 
   private String backgroundTexture;
   private String boardTexture;
@@ -55,14 +56,14 @@ public class Theme {
   /**
    * @return the chipPlacementAnimation
    */
-  public String getChipPlacementAnimation() {
+  public ChipAnimationFactory getChipPlacementAnimation() {
     return chipPlacementAnimation;
   }
 
   /**
    * @param chipPlacementAnimation the chipPlacementAnimation to set
    */
-  public void setChipPlacementAnimation(String chipPlacementAnimation) {
+  public void setChipPlacementAnimation(ChipAnimationFactory chipPlacementAnimation) {
     this.chipPlacementAnimation = chipPlacementAnimation;
   }
 

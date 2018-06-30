@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import com.pargroup.animation.ChipAnimationFactory;
 import com.pargroup.event.listener.ThemeChangeListener;
-import com.pargroup.view.animation.ChipAnimationFactory;
 import com.pargroup.view.theme.Theme;
 
 /**
@@ -26,7 +26,7 @@ public class ThemeManager {
 
   public static void initializeThemes() {
 
-    AnimationLoader.loadAnimations();
+    // TODO: Change animation factories in theme files to match new way of loading.
 
     ThemeLoader.loadThemes();
 
@@ -67,7 +67,7 @@ public class ThemeManager {
   }
 
   public static ChipAnimationFactory getAnimationFactory() {
-    return ChipAnimationFactory.getAnimationFactory(currentTheme.getChipPlacementAnimation());
+    return currentTheme.getChipPlacementAnimation();
   }
 
   /**

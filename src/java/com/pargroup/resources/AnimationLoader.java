@@ -1,7 +1,6 @@
 package com.pargroup.resources;
 
-import com.pargroup.view.animation.DropAnimationFactory;
-import com.pargroup.view.animation.SpriteAnimationFactory;
+import com.pargroup.animation.ChipAnimationFactory;
 
 /**
  * @author Rawad Aboudlal
@@ -9,10 +8,19 @@ import com.pargroup.view.animation.SpriteAnimationFactory;
  */
 public class AnimationLoader {
 
-  static void loadAnimations() {
+  public static ChipAnimationFactory loadAnimationFactory(String name) {
 
-    new DropAnimationFactory();
-    new SpriteAnimationFactory();
+    try {
+
+      Class<?> animationFactoryClass = ClassLoader.getSystemClassLoader().loadClass(name);
+
+      return (ChipAnimationFactory) animationFactoryClass.getConstructor().newInstance();
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+
+    return null;
 
   }
 
