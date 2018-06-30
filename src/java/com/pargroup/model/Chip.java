@@ -7,7 +7,6 @@ package com.pargroup.model;
 public class Chip {
 
   private Player owner;
-  private String colour;
 
   /**
    * @return the owner
@@ -21,20 +20,6 @@ public class Chip {
    */
   public void setOwner(Player owner) {
     this.owner = owner;
-  }
-
-  /**
-   * @return the colour
-   */
-  public String getColour() {
-    return colour;
-  }
-
-  /**
-   * @param colour the colour to set
-   */
-  public void setColour(String colour) {
-    this.colour = colour;
   }
 
 }

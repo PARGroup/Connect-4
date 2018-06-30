@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
 
@@ -15,28 +17,30 @@ public class TextureLoader {
 
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
+  private static final Pattern CHIP_TEXTURE_PATTERN = Pattern.compile("(?<texture>.+?)(,|$) *");
+
   public static Image getBackgroundTexture() {
+    return getBackgroundTexture(ThemeManager.getCurrentTheme());
+  }
 
-    String name = ThemeManager.getCurrentTheme().getBackgroundTexture();
-
-    return getTexture(name);
-
+  public static Image getBackgroundTexture(Theme theme) {
+    return getTexture(theme, theme.getBackgroundTexture());
   }
 
   public static Image getBoardTexture() {
+    return getBoardTexture(ThemeManager.getCurrentTheme());
+  }
 
-    String name = ThemeManager.getCurrentTheme().getBoardTexture();
-
-    return getTexture(name);
-
+  public static Image getBoardTexture(Theme theme) {
+    return getTexture(theme, theme.getBoardTexture());
   }
 
   public static Image getChipTexture(int chipIndex) {
+    return getChipTexture(ThemeManager.getCurrentTheme(), chipIndex);
+  }
 
-    String name = ThemeManager.getCurrentTheme().getChipColours()[chipIndex];
-
-    return getTexture(name);
-
+  public static Image getChipTexture(Theme theme, int chipIndex) {
+    return getTexture(theme, theme.getChipColours().get(chipIndex));
   }
 
   static void parseTextureLine(Theme theme, String key, String value) {
@@ -45,12 +49,17 @@ public class TextureLoader {
       theme.setBoardTexture(value);
     } else if (key.equals("background")) {
       theme.setBackgroundTexture(value);
-    } else if (key.equals("chip1")) {
-      theme.getChipColours()[0] = value;
-    } else if (key.equals("chip2")) {
-      theme.getChipColours()[1] = value;
     } else if (key.equals("animation factory")) {
       theme.setChipPlacementAnimation(value);
+    } else if (key.equals("chips")) {
+
+      Matcher matcher = CHIP_TEXTURE_PATTERN.matcher(value);
+
+      while (matcher.find()) {
+        String chipTexture = matcher.group("texture");
+        theme.getChipColours().add(chipTexture);
+      }
+
     }
 
   }
@@ -62,9 +71,7 @@ public class TextureLoader {
     TextureLoader.loadTexture(theme.getBackgroundTexture(), themeFolder);
     TextureLoader.loadTexture(theme.getBoardTexture(), themeFolder);
 
-    String[] chipColours = theme.getChipColours();
-
-    for (String chipColour : chipColours) {
+    for (String chipColour : theme.getChipColours()) {
       TextureLoader.loadTexture(chipColour, themeFolder);
     }
 
@@ -79,22 +86,12 @@ public class TextureLoader {
 
     try {
 
-      TEXTURES.put(TextureLoader.createKey(name, folder),
+      TEXTURES.put(ThemeManager.createKey(name, folder),
           new Image(new FileInputStream(folder.toPath().resolve(name).toFile())));
 
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-
-  }
-
-  private static Image getTexture(String name) {
-
-    if (name == null) {
-      return null;
-    }
-
-    return TEXTURES.get(TextureLoader.createKey(name));
 
   }
 
@@ -104,20 +101,8 @@ public class TextureLoader {
       return null;
     }
 
-    return TEXTURES.get(TextureLoader.createKey(name, theme));
+    return TEXTURES.get(ThemeManager.createKey(name, theme));
 
-  }
-
-  private static String createKey(String name) {
-    return TextureLoader.createKey(name, ThemeManager.getCurrentTheme());
-  }
-
-  private static String createKey(String name, Theme theme) {
-    return TextureLoader.createKey(name, theme.getFolder());
-  }
-
-  private static String createKey(String name, File folder) {
-    return folder.toPath().getFileName().resolve(name).toString();
   }
 
 }

@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.function.Predicate;
 import com.pargroup.view.BoardConfig;
 import com.pargroup.view.animation.Sprite;
 import com.pargroup.view.theme.Theme;
@@ -54,7 +57,7 @@ public class ThemeLoader {
 
     theme.setFolder(themeFolder);
 
-    theme.setChipColours(new String[2]);
+    theme.setChipColours(new ArrayList<String>(3));
     theme.setBoardConfig(boardConfig);
 
     theme.setSprite(sprite);
@@ -103,6 +106,20 @@ public class ThemeLoader {
         }
 
       }
+
+      theme.getChipColours().removeIf(new Predicate<String>() {
+
+        /**
+         * 
+         * @see java.util.function.Predicate#test(java.lang.Object)
+         */
+        @Override
+        public boolean test(String t) {
+          return t == null;
+        }
+
+      });
+      theme.setChipColours(Collections.unmodifiableList(theme.getChipColours()));
 
       ThemeManager.addTheme(themeFolder.getName(), theme);
 

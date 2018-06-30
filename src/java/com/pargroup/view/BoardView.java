@@ -58,8 +58,6 @@ public class BoardView extends StackPane implements ThemeChangeListener {
 
   public void chipPlaced(UIController uiController, Chip chip, int x, int startY, int endY) {
 
-    chip.setColour(theme.getChipColours()[chip.getOwner().getTurnIndex()]);
-
     ChipView chipView = new ChipView(chip);
 
     Animation chipPlacementAnimation = ChipAnimationFactory

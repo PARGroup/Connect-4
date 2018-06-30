@@ -1,6 +1,7 @@
 package com.pargroup.view.theme;
 
 import java.io.File;
+import java.util.List;
 import com.pargroup.view.BoardConfig;
 import com.pargroup.view.animation.Sprite;
 
@@ -12,7 +13,7 @@ public class Theme {
 
   private File folder;
 
-  private String[] chipColours;
+  private List<String> chipColours;
 
   private String chipPlacementAnimation;
 
@@ -40,14 +41,14 @@ public class Theme {
   /**
    * @return the chipColours
    */
-  public String[] getChipColours() {
+  public List<String> getChipColours() {
     return chipColours;
   }
 
   /**
    * @param chipColours the chipColours to set
    */
-  public void setChipColours(String[] chipColours) {
+  public void setChipColours(List<String> chipColours) {
     this.chipColours = chipColours;
   }
 

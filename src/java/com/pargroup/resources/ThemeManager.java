@@ -1,5 +1,6 @@
 package com.pargroup.resources;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class ThemeManager {
     AnimationLoader.loadAnimations();
 
     ThemeLoader.loadThemes();
+
+    setTheme(DEFAULT_THEME);
 
   }
 
@@ -72,6 +75,14 @@ public class ThemeManager {
    */
   public static Theme getCurrentTheme() {
     return currentTheme;
+  }
+
+  static String createKey(String name, Theme theme) {
+    return ThemeManager.createKey(name, theme.getFolder());
+  }
+
+  static String createKey(String name, File folder) {
+    return folder.toPath().getFileName().resolve(name).toString();
   }
 
 }
