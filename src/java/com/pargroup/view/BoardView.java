@@ -11,10 +11,12 @@ import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * @author Rawad Aboudlal
@@ -26,6 +28,8 @@ public class BoardView extends StackPane implements ThemeChangeListener {
   private Theme theme;
   private BoardConfig boardConfig;
 
+  private PlacementIndicatorView placementIndicatorView;
+  private Pane placementIndicatorPane;
   private ImageView backgroundTexture;
   private Pane chipsPane;
   private ImageView boardTexture;
@@ -39,16 +43,29 @@ public class BoardView extends StackPane implements ThemeChangeListener {
 
     this.board = board;
 
+    placementIndicatorView = new PlacementIndicatorView();
+    placementIndicatorPane = new Pane();
     backgroundTexture = new ImageView();
     chipsPane = new Pane();
     boardTexture = new ImageView();
     clickPane = new Pane();
 
+    placementIndicatorPane.getChildren().add(placementIndicatorView);
+
     updateTheme();
 
+    VBox boardHolder = new VBox();
+    boardHolder.setAlignment(Pos.CENTER);
+    boardHolder.getChildren().add(placementIndicatorPane);
+
+    StackPane boardAndChipsHolder = new StackPane();
+    boardAndChipsHolder.getChildren().add(chipsPane);
+    boardAndChipsHolder.getChildren().add(boardTexture);
+
+    boardHolder.getChildren().add(boardAndChipsHolder);
+
     getChildren().add(backgroundTexture);
-    getChildren().add(chipsPane);
-    getChildren().add(boardTexture);
+    getChildren().add(boardHolder);
     getChildren().add(clickPane);
 
     ThemeManager.addThemeChangeListener(this);
@@ -108,11 +125,18 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     backgroundTexture.setImage(backgroundImage);
     boardTexture.setImage(boardImage);
 
-    chipsPane.maxWidthProperty().bind(boardImage.widthProperty());
-    chipsPane.maxHeightProperty().bind(boardImage.heightProperty());
+    chipsPane.setMaxWidth(boardImage.getWidth());
+    chipsPane.setMaxHeight(boardImage.getHeight());
 
-    clickPane.maxWidthProperty().bind(boardImage.widthProperty());
-    clickPane.maxHeightProperty().bind(boardImage.heightProperty());
+    clickPane.setMaxWidth(boardImage.getWidth());
+    clickPane.setMaxHeight(boardImage.getHeight());
+
+    placementIndicatorPane.setMaxWidth(boardImage.getWidth());
+    placementIndicatorPane.setMaxHeight(boardConfig.getChipRadius() * 2 + boardConfig.getVgap());
+    placementIndicatorPane.setMinHeight(boardConfig.getChipRadius() * 2 + boardConfig.getVgap());
+
+    // placementIndicatorPane.translateYProperty()
+    // .bind(boardTexture.yProperty().subtract(placementIndicatorPane.heightProperty()));
 
   }
 
@@ -128,6 +152,13 @@ public class BoardView extends StackPane implements ThemeChangeListener {
    */
   public BoardConfig getBoardConfig() {
     return boardConfig;
+  }
+
+  /**
+   * @return the placementIndicatorView
+   */
+  public PlacementIndicatorView getPlacementIndicatorView() {
+    return placementIndicatorView;
   }
 
 }

@@ -3,8 +3,9 @@ animation factory=com.pargroup.animation.DropAnimationFactory
 
 Textures
 board=board-trans-yellow.png
-background=
+background=background.png
 chips=blue_chip.png, red_chip.png
+indicators=Arrow Blue-resized.png, Arrow red-resized.png
 
 Board Config
 columns=7

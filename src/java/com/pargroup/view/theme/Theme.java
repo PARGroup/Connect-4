@@ -25,6 +25,8 @@ public class Theme {
 
   private Sprite sprite;
 
+  private List<String> indicatorTextures;
+
   /**
    * @return the folder
    */
@@ -121,6 +123,20 @@ public class Theme {
    */
   public void setSprite(Sprite sprite) {
     this.sprite = sprite;
+  }
+
+  /**
+   * @return the indicatorTextures
+   */
+  public List<String> getIndicatorTextures() {
+    return indicatorTextures;
+  }
+
+  /**
+   * @param indicatorTextures the indicatorTextures to set
+   */
+  public void setIndicatorTextures(List<String> indicatorTextures) {
+    this.indicatorTextures = indicatorTextures;
   }
 
 }

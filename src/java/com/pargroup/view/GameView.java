@@ -38,6 +38,7 @@ public class GameView implements ThemeChangeListener {
     constructView();
 
     uiController.addBoardView(boardView);
+    uiController.addPlacementIndicatorView(boardView.getPlacementIndicatorView());
 
     stage.setScene(scene);
     stage.sizeToScene();

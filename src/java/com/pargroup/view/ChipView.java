@@ -22,7 +22,7 @@ public class ChipView extends ImageView implements ThemeChangeListener {
 
     this.chip = chip;
 
-    updateImage();
+    updateTexture();
 
     ThemeManager.addThemeChangeListener(this);
 
@@ -36,11 +36,11 @@ public class ChipView extends ImageView implements ThemeChangeListener {
 
     ThemeManager.getAnimationFactory().resetViewport(this);
 
-    updateImage();
+    updateTexture();
 
   }
 
-  private void updateImage() {
+  private void updateTexture() {
     setImage(TextureLoader.getChipTexture(chip.getOwner()));
   }
 

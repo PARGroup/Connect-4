@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.pargroup.model.Player;
@@ -20,7 +21,7 @@ public class TextureLoader {
 
   private static final HashMap<String, Image> TEXTURES = new HashMap<String, Image>();
 
-  private static final Pattern CHIP_TEXTURE_PATTERN = Pattern.compile("(?<texture>.+?)(,|$) *");
+  private static final Pattern TEXTURE_LIST_PATTERN = Pattern.compile("(?<texture>.+?)(,|$) *");
 
   public static Image getBackgroundTexture() {
     return getBackgroundTexture(ThemeManager.getCurrentTheme());
@@ -46,6 +47,14 @@ public class TextureLoader {
     return getTexture(theme, theme.getChipColours().get(player.getTurnIndex()));
   }
 
+  public static Image getIndicatorTexture(Player player) {
+    return getIndicatorTexture(ThemeManager.getCurrentTheme(), player);
+  }
+
+  public static Image getIndicatorTexture(Theme theme, Player player) {
+    return getTexture(theme, theme.getIndicatorTextures().get(player.getTurnIndex()));
+  }
+
   static void parseTextureLine(Theme theme, String key, String value) {
 
     if (key.equals("board")) {
@@ -53,19 +62,25 @@ public class TextureLoader {
     } else if (key.equals("background")) {
       theme.setBackgroundTexture(value);
     } else if (key.equals("chips")) {
-
-      Matcher matcher = CHIP_TEXTURE_PATTERN.matcher(value);
-
-      theme.setChipColours(new ArrayList<String>());
-
-      while (matcher.find()) {
-        String chipTexture = matcher.group("texture");
-        theme.getChipColours().add(chipTexture);
-      }
-
-      theme.setChipColours(Collections.unmodifiableList(theme.getChipColours()));
-
+      theme.setChipColours(TextureLoader.parseTextureList(value));
+    } else if (key.equals("indicators")) {
+      theme.setIndicatorTextures(TextureLoader.parseTextureList(value));
     }
+
+  }
+
+  private static List<String> parseTextureList(String value) {
+
+    List<String> list = new ArrayList<String>();
+
+    Matcher matcher = TEXTURE_LIST_PATTERN.matcher(value);
+
+    while (matcher.find()) {
+      String chipTexture = matcher.group("texture");
+      list.add(chipTexture);
+    }
+
+    return Collections.unmodifiableList(list);
 
   }
 
@@ -78,6 +93,10 @@ public class TextureLoader {
 
     for (String chipColour : theme.getChipColours()) {
       TextureLoader.loadTexture(chipColour, themeFolder);
+    }
+
+    for (String indicatorTexture : theme.getIndicatorTextures()) {
+      TextureLoader.loadTexture(indicatorTexture, themeFolder);
     }
 
   }

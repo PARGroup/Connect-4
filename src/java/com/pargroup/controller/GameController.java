@@ -171,4 +171,11 @@ public class GameController implements RequestListener, ResolutionListener {
     return board;
   }
 
+  /**
+   * @return the currentPlayer
+   */
+  public Player getCurrentPlayer() {
+    return currentPlayer;
+  }
+
 }

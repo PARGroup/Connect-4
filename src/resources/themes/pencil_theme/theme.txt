@@ -5,6 +5,7 @@ Textures
 board=Board.png
 background=background.png
 chips=SpriteSheetBlue.png, SpriteSheetRed.png
+indicators=Arrow Blue-resized.png, Arrow red-resized.png
 
 Board Config
 boardWidth=504
