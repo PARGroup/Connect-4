@@ -26,8 +26,6 @@ public class ThemeManager {
 
   public static void initializeThemes() {
 
-    // TODO: Change animation factories in theme files to match new way of loading.
-
     ThemeLoader.loadThemes();
 
     setTheme(DEFAULT_THEME);
