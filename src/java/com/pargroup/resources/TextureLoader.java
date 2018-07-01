@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.pargroup.model.Player;
 import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
 
@@ -37,12 +38,12 @@ public class TextureLoader {
     return getTexture(theme, theme.getBoardTexture());
   }
 
-  public static Image getChipTexture(int chipIndex) {
-    return getChipTexture(ThemeManager.getCurrentTheme(), chipIndex);
+  public static Image getChipTexture(Player player) {
+    return getChipTexture(ThemeManager.getCurrentTheme(), player);
   }
 
-  public static Image getChipTexture(Theme theme, int chipIndex) {
-    return getTexture(theme, theme.getChipColours().get(chipIndex));
+  public static Image getChipTexture(Theme theme, Player player) {
+    return getTexture(theme, theme.getChipColours().get(player.getTurnIndex()));
   }
 
   static void parseTextureLine(Theme theme, String key, String value) {

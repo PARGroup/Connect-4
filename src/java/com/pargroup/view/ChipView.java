@@ -41,7 +41,7 @@ public class ChipView extends ImageView implements ThemeChangeListener {
   }
 
   private void updateImage() {
-    setImage(TextureLoader.getChipTexture(chip.getOwner().getTurnIndex()));
+    setImage(TextureLoader.getChipTexture(chip.getOwner()));
   }
 
   /**
