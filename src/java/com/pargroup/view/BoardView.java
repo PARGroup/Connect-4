@@ -61,12 +61,12 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     StackPane boardAndChipsHolder = new StackPane();
     boardAndChipsHolder.getChildren().add(chipsPane);
     boardAndChipsHolder.getChildren().add(boardTexture);
+    boardAndChipsHolder.getChildren().add(clickPane);
 
     boardHolder.getChildren().add(boardAndChipsHolder);
 
     getChildren().add(backgroundTexture);
     getChildren().add(boardHolder);
-    getChildren().add(clickPane);
 
     ThemeManager.addThemeChangeListener(this);
 
