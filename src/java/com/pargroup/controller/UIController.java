@@ -183,7 +183,8 @@ public class UIController implements ResolutionListener {
    * @return
    */
   private int getColumnFromX(int x) {
-    return x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
+    return (x - (boardConfig.getHgap() / 2))
+        / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
   }
 
   /**
@@ -242,6 +243,7 @@ public class UIController implements ResolutionListener {
 
     gameController.getEventManager().unblockEvent(PlaceChipRequestEvent.class);
 
+    // TODO: Figure this out. Click then move out of clickPane and the indicator is still there.
     placementIndicatorView.setCurrentPlayer(gameController.getCurrentPlayer());
 
   }
