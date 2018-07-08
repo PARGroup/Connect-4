@@ -15,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -32,8 +33,7 @@ public class BoardView extends StackPane implements ThemeChangeListener {
   private Pane placementIndicatorPane;
   private ImageView backgroundTexture;
   private Pane chipsPane;
-  private ImageView boardTexture;
-  private Pane clickPane;
+  private ImageView boardTextureView;
 
   /**
    * @param board
@@ -47,8 +47,7 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     placementIndicatorPane = new Pane();
     backgroundTexture = new ImageView();
     chipsPane = new Pane();
-    boardTexture = new ImageView();
-    clickPane = new Pane();
+    boardTextureView = new ImageView();
 
     placementIndicatorPane.getChildren().add(placementIndicatorView);
 
@@ -60,8 +59,7 @@ public class BoardView extends StackPane implements ThemeChangeListener {
 
     StackPane boardAndChipsHolder = new StackPane();
     boardAndChipsHolder.getChildren().add(chipsPane);
-    boardAndChipsHolder.getChildren().add(boardTexture);
-    boardAndChipsHolder.getChildren().add(clickPane);
+    boardAndChipsHolder.getChildren().add(boardTextureView);
 
     boardHolder.getChildren().add(boardAndChipsHolder);
 
@@ -123,23 +121,20 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     Image boardImage = TextureLoader.getBoardTexture();
 
     backgroundTexture.setImage(backgroundImage);
-    boardTexture.setImage(boardImage);
+    boardTextureView.setImage(boardImage);
 
     chipsPane.setMaxWidth(boardImage.getWidth());
     chipsPane.setMaxHeight(boardImage.getHeight());
-
-    clickPane.setMaxWidth(boardImage.getWidth());
-    clickPane.setMaxHeight(boardImage.getHeight());
 
     placementIndicatorPane.setMaxWidth(boardImage.getWidth());
 
   }
 
   /**
-   * @return the clickPane
+   * @return the boardTextureView
    */
-  public Pane getClickPane() {
-    return clickPane;
+  public ImageView getBoardTextureView() {
+    return boardTextureView;
   }
 
   /**

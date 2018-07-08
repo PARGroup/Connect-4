@@ -52,6 +52,10 @@ public class ThemeManager {
     THEMES.put(key, theme);
   }
 
+  public static Theme getTheme(String key) {
+    return THEMES.get(key);
+  }
+
   public static void addThemeChangeListener(ThemeChangeListener listener) {
     THEME_CHANGE_LISTENERS.add(listener);
   }

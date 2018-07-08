@@ -111,7 +111,7 @@ public class UIController implements ResolutionListener {
     this.boardView = boardView;
     this.boardConfig = boardView.getBoardConfig();
 
-    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_PRESSED,
+    boardView.getBoardTextureView().addEventHandler(MouseEvent.MOUSE_PRESSED,
         new EventHandler<MouseEvent>() {
           /**
            * @see javafx.event.EventHandler#handle(javafx.event.Event)
@@ -131,7 +131,7 @@ public class UIController implements ResolutionListener {
           }
         });
 
-    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_MOVED,
+    boardView.getBoardTextureView().addEventHandler(MouseEvent.MOUSE_MOVED,
         new EventHandler<MouseEvent>() {
           /**
            * @see javafx.event.EventHandler#handle(javafx.event.Event)
@@ -143,6 +143,8 @@ public class UIController implements ResolutionListener {
             int column = getColumnFromX(x);
 
             updatePlacementIndicatorViewPosition(column);
+
+            System.out.printf("\n");
 
           }
         });
@@ -157,8 +159,7 @@ public class UIController implements ResolutionListener {
    * @return
    */
   private int getColumnFromX(int x) {
-    return (x - (boardConfig.getHgap() / 2))
-        / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
+    return x / ((boardConfig.getChipRadius() * 2) + boardConfig.getHgap());
   }
 
   /**
