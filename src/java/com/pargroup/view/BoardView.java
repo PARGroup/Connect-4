@@ -132,11 +132,6 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     clickPane.setMaxHeight(boardImage.getHeight());
 
     placementIndicatorPane.setMaxWidth(boardImage.getWidth());
-    placementIndicatorPane.setMaxHeight(boardConfig.getChipRadius() * 2 + boardConfig.getVgap());
-    placementIndicatorPane.setMinHeight(boardConfig.getChipRadius() * 2 + boardConfig.getVgap());
-
-    // placementIndicatorPane.translateYProperty()
-    // .bind(boardTexture.yProperty().subtract(placementIndicatorPane.heightProperty()));
 
   }
 

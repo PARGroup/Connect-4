@@ -93,8 +93,6 @@ public class UIController implements ResolutionListener {
         @Override
         public void run() {
 
-          placementIndicatorView.setCurrentPlayer(null);
-
           boardView.chipPlaced(UIController.this, chip, x, y, endY);
 
         }
@@ -113,7 +111,7 @@ public class UIController implements ResolutionListener {
     this.boardView = boardView;
     this.boardConfig = boardView.getBoardConfig();
 
-    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_CLICKED,
+    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_PRESSED,
         new EventHandler<MouseEvent>() {
           /**
            * @see javafx.event.EventHandler#handle(javafx.event.Event)
@@ -143,33 +141,9 @@ public class UIController implements ResolutionListener {
 
             int x = (int) event.getX();
             int column = getColumnFromX(x);
-            int properX = getXFromColumn(column);
 
-            placementIndicatorView.setTranslateX(properX);
-            placementIndicatorView.setTranslateY(boardConfig.getVgap());
+            updatePlacementIndicatorViewPosition(column);
 
-          }
-        });
-
-    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_EXITED,
-        new EventHandler<MouseEvent>() {
-          /**
-           * @see javafx.event.EventHandler#handle(javafx.event.Event)
-           */
-          @Override
-          public void handle(MouseEvent event) {
-            placementIndicatorView.setCurrentPlayer(null);
-          }
-        });
-
-    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_ENTERED,
-        new EventHandler<MouseEvent>() {
-          /**
-           * @see javafx.event.EventHandler#handle(javafx.event.Event)
-           */
-          @Override
-          public void handle(MouseEvent event) {
-            placementIndicatorView.setCurrentPlayer(gameController.getCurrentPlayer());
           }
         });
 
@@ -197,6 +171,14 @@ public class UIController implements ResolutionListener {
   private int getXFromColumn(int column) {
     return column * (boardConfig.getChipRadius() * 2 + boardConfig.getHgap())
         + (boardConfig.getHgap() / 2);
+  }
+
+  private void updatePlacementIndicatorViewPosition(int column) {
+
+    int properX = getXFromColumn(column);
+
+    placementIndicatorView.setTranslateX(properX);
+
   }
 
   public void addStage(Stage stage) {
@@ -233,7 +215,12 @@ public class UIController implements ResolutionListener {
    * @param placementIndicatorView
    */
   public void addPlacementIndicatorView(PlacementIndicatorView placementIndicatorView) {
+
     this.placementIndicatorView = placementIndicatorView;
+
+    placementIndicatorView.setCurrentPlayer(gameController.getCurrentPlayer());
+    updatePlacementIndicatorViewPosition(0);
+
   }
 
   public void onChipPlaced(ChipView chipView, int x, int y) {
@@ -243,7 +230,6 @@ public class UIController implements ResolutionListener {
 
     gameController.getEventManager().unblockEvent(PlaceChipRequestEvent.class);
 
-    // TODO: Figure this out. Click then move out of clickPane and the indicator is still there.
     placementIndicatorView.setCurrentPlayer(gameController.getCurrentPlayer());
 
   }
