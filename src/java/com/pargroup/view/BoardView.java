@@ -15,7 +15,6 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -34,6 +33,7 @@ public class BoardView extends StackPane implements ThemeChangeListener {
   private ImageView backgroundTexture;
   private Pane chipsPane;
   private ImageView boardTextureView;
+  private Pane clickPane;
 
   /**
    * @param board
@@ -48,6 +48,7 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     backgroundTexture = new ImageView();
     chipsPane = new Pane();
     boardTextureView = new ImageView();
+    clickPane = new Pane();
 
     placementIndicatorPane.getChildren().add(placementIndicatorView);
 
@@ -60,6 +61,7 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     StackPane boardAndChipsHolder = new StackPane();
     boardAndChipsHolder.getChildren().add(chipsPane);
     boardAndChipsHolder.getChildren().add(boardTextureView);
+    boardAndChipsHolder.getChildren().add(clickPane);
 
     boardHolder.getChildren().add(boardAndChipsHolder);
 
@@ -123,8 +125,11 @@ public class BoardView extends StackPane implements ThemeChangeListener {
     backgroundTexture.setImage(backgroundImage);
     boardTextureView.setImage(boardImage);
 
-    chipsPane.setMaxWidth(boardImage.getWidth());
-    chipsPane.setMaxHeight(boardImage.getHeight());
+    chipsPane.setMaxWidth(boardImage.getWidth() - 1);
+    chipsPane.setMaxHeight(boardImage.getHeight() - 1);
+
+    clickPane.setMaxWidth(boardImage.getWidth() - 1);
+    clickPane.setMaxHeight(boardImage.getHeight() - 1);
 
     placementIndicatorPane.setMaxWidth(boardImage.getWidth());
 
@@ -133,8 +138,8 @@ public class BoardView extends StackPane implements ThemeChangeListener {
   /**
    * @return the boardTextureView
    */
-  public ImageView getBoardTextureView() {
-    return boardTextureView;
+  public Pane getClickPane() {
+    return clickPane;
   }
 
   /**
