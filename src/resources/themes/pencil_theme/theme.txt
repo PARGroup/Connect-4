@@ -1,13 +1,13 @@
+General
+animation factory=com.pargroup.animation.SpriteAnimationFactory
+
 Textures
-board=board-trans-yellow.png
-background=
-chip1=blue_chip_sprite.png
-chip2=red_chip_sprite.png
-animation factory=SpriteAnimationFactory
+board=Board.png
+background=background.png
+chips=SpriteSheetBlue.png, SpriteSheetRed.png
+indicators=Arrow Blue-resized.png, Arrow red-resized.png
 
 Board Config
-columns=7
-rows=6
 boardWidth=504
 boardHeight=440
 chipRadius=32
@@ -18,8 +18,7 @@ vgap=8
 
 Sprite
 duration=1000ms
-numberOfFrames=8
-columns=3
+numberOfFrames=6
+columns=6
 cellWidth=64
 cellHeight=64
-

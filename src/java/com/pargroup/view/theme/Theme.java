@@ -1,7 +1,10 @@
 package com.pargroup.view.theme;
 
+import java.io.File;
+import java.util.List;
+import com.pargroup.animation.ChipAnimationFactory;
+import com.pargroup.animation.Sprite;
 import com.pargroup.view.BoardConfig;
-import com.pargroup.view.animation.Sprite;
 
 /**
  * @author Rawad Aboudlal
@@ -9,9 +12,11 @@ import com.pargroup.view.animation.Sprite;
  */
 public class Theme {
 
-  private String[] chipColours;
+  private File folder;
 
-  private String chipPlacementAnimation;
+  private List<String> chipColours;
+
+  private ChipAnimationFactory chipPlacementAnimation;
 
   private String backgroundTexture;
   private String boardTexture;
@@ -20,31 +25,47 @@ public class Theme {
 
   private Sprite sprite;
 
+  private List<String> indicatorTextures;
+
+  /**
+   * @return the folder
+   */
+  public File getFolder() {
+    return folder;
+  }
+
+  /**
+   * @param folder the folder to set
+   */
+  public void setFolder(File folder) {
+    this.folder = folder;
+  }
+
   /**
    * @return the chipColours
    */
-  public String[] getChipColours() {
+  public List<String> getChipColours() {
     return chipColours;
   }
 
   /**
    * @param chipColours the chipColours to set
    */
-  public void setChipColours(String[] chipColours) {
+  public void setChipColours(List<String> chipColours) {
     this.chipColours = chipColours;
   }
 
   /**
    * @return the chipPlacementAnimation
    */
-  public String getChipPlacementAnimation() {
+  public ChipAnimationFactory getChipPlacementAnimation() {
     return chipPlacementAnimation;
   }
 
   /**
    * @param chipPlacementAnimation the chipPlacementAnimation to set
    */
-  public void setChipPlacementAnimation(String chipPlacementAnimation) {
+  public void setChipPlacementAnimation(ChipAnimationFactory chipPlacementAnimation) {
     this.chipPlacementAnimation = chipPlacementAnimation;
   }
 
@@ -102,6 +123,20 @@ public class Theme {
    */
   public void setSprite(Sprite sprite) {
     this.sprite = sprite;
+  }
+
+  /**
+   * @return the indicatorTextures
+   */
+  public List<String> getIndicatorTextures() {
+    return indicatorTextures;
+  }
+
+  /**
+   * @param indicatorTextures the indicatorTextures to set
+   */
+  public void setIndicatorTextures(List<String> indicatorTextures) {
+    this.indicatorTextures = indicatorTextures;
   }
 
 }

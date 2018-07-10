@@ -1,73 +1,81 @@
 package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
+import com.pargroup.event.listener.ThemeChangeListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
-import com.pargroup.view.animation.ChipAnimationFactory;
+import com.pargroup.resources.ThemeManager;
 import com.pargroup.view.theme.Theme;
 import javafx.animation.Animation;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * @author Rawad Aboudlal
  *
  */
-public class BoardView extends StackPane {
+public class BoardView extends StackPane implements ThemeChangeListener {
 
   private Board board;
   private Theme theme;
   private BoardConfig boardConfig;
 
+  private PlacementIndicatorView placementIndicatorView;
+  private Pane placementIndicatorPane;
   private ImageView backgroundTexture;
   private Pane chipsPane;
-  private ImageView boardTexture;
-  private Pane clickPane;
+  private ImageView boardTextureView;
 
   /**
    * @param board
-   * @param theme
    */
-  public BoardView(Board board, Theme theme) {
+  public BoardView(Board board) {
     super();
 
     this.board = board;
-    this.theme = theme;
-    this.boardConfig = theme.getBoardConfig();
 
-    Image boardImage = TextureLoader.getTexture(TextureLoader.BOARD);
-
+    placementIndicatorView = new PlacementIndicatorView();
+    placementIndicatorPane = new Pane();
     backgroundTexture = new ImageView();
     chipsPane = new Pane();
-    boardTexture = new ImageView(boardImage);
-    clickPane = new Pane();
+    boardTextureView = new ImageView();
 
-    chipsPane.maxWidthProperty().bind(boardImage.widthProperty());
-    chipsPane.maxHeightProperty().bind(boardImage.heightProperty());
+    placementIndicatorPane.getChildren().add(placementIndicatorView);
 
-    clickPane.maxWidthProperty().bind(boardImage.widthProperty());
-    clickPane.maxHeightProperty().bind(boardImage.heightProperty());
+    updateTheme();
+
+    VBox boardHolder = new VBox();
+    boardHolder.setAlignment(Pos.CENTER);
+    boardHolder.getChildren().add(placementIndicatorPane);
+
+    StackPane boardAndChipsHolder = new StackPane();
+    boardAndChipsHolder.getChildren().add(chipsPane);
+    boardAndChipsHolder.getChildren().add(boardTextureView);
+
+    boardHolder.getChildren().add(boardAndChipsHolder);
 
     getChildren().add(backgroundTexture);
-    getChildren().add(chipsPane);
-    getChildren().add(boardTexture);
-    getChildren().add(clickPane);
+    getChildren().add(boardHolder);
+
+    ThemeManager.addThemeChangeListener(this);
 
   }
 
   public void chipPlaced(UIController uiController, Chip chip, int x, int startY, int endY) {
 
-    chip.setColour(theme.getChipColours()[chip.getOwner().getTurnIndex()]);
-
     ChipView chipView = new ChipView(chip);
 
-    Animation chipPlacementAnimation = ChipAnimationFactory.createAnimation(
-        theme.getChipPlacementAnimation(), chipView, x, startY, endY, theme.getSprite());
+    Animation chipPlacementAnimation =
+        ThemeManager.getAnimationFactory().createAnimation(chipView, x, startY, endY);
 
     chipPlacementAnimation.setOnFinished(new EventHandler<ActionEvent>() {
 
@@ -87,10 +95,46 @@ public class BoardView extends StackPane {
   }
 
   /**
-   * @return the clickPane
+   * @see com.pargroup.event.listener.ThemeChangeListener#onThemeChange()
    */
-  public Pane getClickPane() {
-    return clickPane;
+  @Override
+  public void onThemeChange() {
+
+    Platform.runLater(new Runnable() {
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+        updateTheme();
+      }
+    });
+
+  }
+
+  private void updateTheme() {
+
+    this.theme = ThemeManager.getCurrentTheme();
+    this.boardConfig = theme.getBoardConfig();
+
+    Image backgroundImage = TextureLoader.getBackgroundTexture();
+    Image boardImage = TextureLoader.getBoardTexture();
+
+    backgroundTexture.setImage(backgroundImage);
+    boardTextureView.setImage(boardImage);
+
+    chipsPane.setMaxWidth(boardImage.getWidth());
+    chipsPane.setMaxHeight(boardImage.getHeight());
+
+    placementIndicatorPane.setMaxWidth(boardImage.getWidth());
+
+  }
+
+  /**
+   * @return the boardTextureView
+   */
+  public ImageView getBoardTextureView() {
+    return boardTextureView;
   }
 
   /**
@@ -98,6 +142,13 @@ public class BoardView extends StackPane {
    */
   public BoardConfig getBoardConfig() {
     return boardConfig;
+  }
+
+  /**
+   * @return the placementIndicatorView
+   */
+  public PlacementIndicatorView getPlacementIndicatorView() {
+    return placementIndicatorView;
   }
 
 }

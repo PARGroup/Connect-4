@@ -8,7 +8,7 @@ import com.pargroup.view.BoardConfig;
  */
 public class BoardConfigLoader {
 
-  public static void parseBoardConfigLine(BoardConfig boardConfig, String key, String value) {
+  static void parseBoardConfigLine(BoardConfig boardConfig, String key, String value) {
 
     int intValue = Integer.parseInt(value);
 
