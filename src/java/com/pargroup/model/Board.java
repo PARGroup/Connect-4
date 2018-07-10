@@ -6,8 +6,8 @@ package com.pargroup.model;
  */
 public class Board {
 
-  private static final int ROWS = 6;
-  private static final int COLUMNS = 7;
+  public static final int ROWS = 6;
+  public static final int COLUMNS = 7;
 
   private Chip[][] chips;
 
