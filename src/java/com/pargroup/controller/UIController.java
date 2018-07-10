@@ -111,7 +111,7 @@ public class UIController implements ResolutionListener {
     this.boardView = boardView;
     this.boardConfig = boardView.getBoardConfig();
 
-    boardView.getBoardTextureView().addEventHandler(MouseEvent.MOUSE_PRESSED,
+    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_PRESSED,
         new EventHandler<MouseEvent>() {
           /**
            * @see javafx.event.EventHandler#handle(javafx.event.Event)
@@ -131,7 +131,7 @@ public class UIController implements ResolutionListener {
           }
         });
 
-    boardView.getBoardTextureView().addEventHandler(MouseEvent.MOUSE_MOVED,
+    boardView.getClickPane().addEventHandler(MouseEvent.MOUSE_MOVED,
         new EventHandler<MouseEvent>() {
           /**
            * @see javafx.event.EventHandler#handle(javafx.event.Event)
