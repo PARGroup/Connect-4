@@ -1,5 +1,6 @@
 package com.pargroup.controller;
 
+import java.io.Console;
 import java.util.concurrent.TimeUnit;
 import com.pargroup.event.ChipPlacedEvent;
 import com.pargroup.event.EventManager;
@@ -13,6 +14,7 @@ import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
 import com.pargroup.model.Player;
+import com.pargroup.resources.ThemeLoader;
 
 /**
  * @author Rawad Aboudlal
@@ -149,8 +151,72 @@ public class GameController implements RequestListener, ResolutionListener {
     row--;
 
     chips[row][column] = chip;
-    eventManager.addEvent(new ChipPlacedEvent(chip, column, row));
+    eventManager.addEvent(new ChipPlacedEvent(chip, column, row));//TODO: refactor chipplaced event
+    //TODO: stop using TODOs
 
+    checkWin(board.getChips(), row, column);
+  }
+  
+  private boolean checkWin(Chip[][] chips, int row, int column) {
+	  int xmax = 7; //width
+	  int ymax = 6;  //height
+	  
+	  /*for (int x = 0; x < chips.length; x++) {
+		  for (int y = 0; y < chips[0].length; y++) {
+			  System.out.print(x + " " + y + "    ");
+		  }
+		  System.out.println();
+	  }*/
+	  
+	  Player lastChipOwner = null;
+	  int currentStreak = 0;
+	  
+	  //horizontal
+	  for (int x = 0; x < xmax; x++) {
+		  if (chips[row][x] == null){
+			  lastChipOwner = null;
+			  currentStreak = 0;
+			  //System.out.print(currentStreak + " ");
+		  } else if (lastChipOwner == null || chips[row][x].getOwner() == lastChipOwner) {
+			  System.out.println(lastChipOwner == null);
+			  System.out.println(chips[row][x].getOwner() == lastChipOwner);
+			  currentStreak++;
+			  //System.out.print(currentStreak + " ");
+			  if (currentStreak >= 4) {
+				  System.out.println("Win!");
+				  return true;
+			  }
+		  } else {
+			  lastChipOwner = chips[row][x].getOwner();
+			  currentStreak = 0;
+			  //System.out.print(currentStreak + " ");
+		  }
+	  }
+	  System.out.println();
+	  
+	  /*if (1 + checkWinRecursive(chips, row, column, 1, 0) + checkWinRecursive(chips, row, column, -1, 0) >= 4
+		  || 1 + checkWinRecursive(chips, row, column, 0, 1) + checkWinRecursive(chips, row, column, 0, -1) >= 4
+		  || 1 + checkWinRecursive(chips, row, column, 1, 1) + checkWinRecursive(chips, row, column, -1, -1) >= 4
+		  || 1 + checkWinRecursive(chips, row, column, 1, -1) + checkWinRecursive(chips, row, column, -1, 1) >= 4) {
+		  System.out.println("Win!");
+	  }*/
+	  
+	  return false; //temp
+  }
+  
+  private int checkWinRecursive(Chip[][] chips, int row, int column, int dirx, int diry) {
+	  int xmax = 7; //width
+	  int ymax = 6;  //height
+	  
+	  if (row + diry < 0 || row + diry >= ymax || column + dirx < 0 || column + dirx >= xmax) {
+		  return 0;
+	  } else if (chips[row+diry][column+dirx] == null) {
+		  return 0;
+	  } else if (chips[row][column].getOwner() == chips[row+diry][column+dirx].getOwner()) {
+		  return 0;
+	  } else {
+		  return 1 + checkWinRecursive(chips, row+diry, column+dirx, dirx, diry);
+	  }
   }
 
   public void terminate() {
@@ -170,12 +236,11 @@ public class GameController implements RequestListener, ResolutionListener {
   public Board getBoard() {
     return board;
   }
-
+  
   /**
    * @return the currentPlayer
    */
   public Player getCurrentPlayer() {
     return currentPlayer;
   }
-
 }
