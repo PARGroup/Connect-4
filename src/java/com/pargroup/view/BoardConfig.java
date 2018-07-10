@@ -1,13 +1,10 @@
-package com.pargroup.model;
+package com.pargroup.view;
 
 /**
  * @author Rawad Aboudlal
  *
  */
 public class BoardConfig {
-
-  private int columns;
-  private int rows;
 
   private int boardWidth;
   private int boardHeight;
@@ -19,34 +16,6 @@ public class BoardConfig {
 
   private int hgap;
   private int vgap;
-
-  /**
-   * @return the columns
-   */
-  public int getColumns() {
-    return columns;
-  }
-
-  /**
-   * @param columns the columns to set
-   */
-  public void setColumns(int columns) {
-    this.columns = columns;
-  }
-
-  /**
-   * @return the rows
-   */
-  public int getRows() {
-    return rows;
-  }
-
-  /**
-   * @param rows the rows to set
-   */
-  public void setRows(int rows) {
-    this.rows = rows;
-  }
 
   /**
    * @return the chipRadius

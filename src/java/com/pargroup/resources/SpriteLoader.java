@@ -1,6 +1,6 @@
 package com.pargroup.resources;
 
-import com.pargroup.view.animation.Sprite;
+import com.pargroup.animation.Sprite;
 import javafx.util.Duration;
 
 /**

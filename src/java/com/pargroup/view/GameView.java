@@ -1,10 +1,9 @@
 package com.pargroup.view;
 
 import com.pargroup.controller.UIController;
+import com.pargroup.event.listener.ThemeChangeListener;
 import com.pargroup.model.Board;
-import com.pargroup.resources.AnimationLoader;
-import com.pargroup.resources.ThemeLoader;
-import com.pargroup.view.theme.Theme;
+import com.pargroup.resources.ThemeManager;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -14,15 +13,13 @@ import javafx.stage.Stage;
  * @author Rawad Aboudlal
  *
  */
-public class GameView {
+public class GameView implements ThemeChangeListener {
 
   private static final String WINDOW_TITLE = "Connect 4";
 
   private Stage stage;
   private BorderPane root;
   private BoardView boardView;
-
-  private Theme theme;
 
   private Board board;
 
@@ -41,6 +38,7 @@ public class GameView {
     constructView();
 
     uiController.addBoardView(boardView);
+    uiController.addPlacementIndicatorView(boardView.getPlacementIndicatorView());
 
     stage.setScene(scene);
     stage.sizeToScene();
@@ -54,14 +52,43 @@ public class GameView {
 
   private void constructView() {
 
-    AnimationLoader.loadAnimations();
-    ThemeLoader.loadThemes();
+    ThemeManager.initializeThemes();
 
-    theme = ThemeLoader.getTheme(ThemeLoader.PENCIL_THEME);
+    ThemeManager.setTheme(ThemeManager.PENCIL_THEME);
 
-    boardView = new BoardView(board, theme);
+    boardView = new BoardView(board);
+
+    // It is very important that the GameView is added as a ThemeChangeListener after the BoardView
+    // (which is done upon initialization) so that the new theme's textures can be used to properly
+    // resize the Stage.
+    ThemeManager.addThemeChangeListener(this);
 
     root.setCenter(boardView);
+
+  }
+
+  /**
+   * @see com.pargroup.event.listener.ThemeChangeListener#onThemeChange()
+   */
+  @Override
+  public void onThemeChange() {
+
+    Platform.runLater(new Runnable() {
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+
+        stage.sizeToScene();
+
+        stage.setMinWidth(stage.getWidth());
+        stage.setMinHeight(stage.getHeight());
+
+        stage.centerOnScreen();
+
+      }
+    });
 
   }
 

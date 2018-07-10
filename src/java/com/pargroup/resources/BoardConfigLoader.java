@@ -1,6 +1,6 @@
 package com.pargroup.resources;
 
-import com.pargroup.model.BoardConfig;
+import com.pargroup.view.BoardConfig;
 
 /**
  * @author Rawad Aboudlal
@@ -8,15 +8,11 @@ import com.pargroup.model.BoardConfig;
  */
 public class BoardConfigLoader {
 
-  public static void parseBoardConfigLine(BoardConfig boardConfig, String key, String value) {
+  static void parseBoardConfigLine(BoardConfig boardConfig, String key, String value) {
 
     int intValue = Integer.parseInt(value);
 
-    if (key.equals("columns")) {
-      boardConfig.setColumns(intValue);
-    } else if (key.equals("rows")) {
-      boardConfig.setRows(intValue);
-    } else if (key.equals("boardWidth")) {
+    if (key.equals("boardWidth")) {
       boardConfig.setBoardWidth(intValue);
     } else if (key.equals("boardHeight")) {
       boardConfig.setBoardHeight(intValue);

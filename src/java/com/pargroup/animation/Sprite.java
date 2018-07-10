@@ -1,4 +1,4 @@
-package com.pargroup.view.animation;
+package com.pargroup.animation;
 
 import javafx.util.Duration;
 

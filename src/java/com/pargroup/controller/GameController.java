@@ -107,7 +107,6 @@ public class GameController implements RequestListener, ResolutionListener {
 
       Chip chip = new Chip();
       chip.setOwner(currentPlayer);
-      chip.setColour(chip.getOwner().getColour());
 
       placeChip(chip, placeChipRequestEvent.getColumn());
 
@@ -162,9 +161,6 @@ public class GameController implements RequestListener, ResolutionListener {
 	  int xmax = 7; //width
 	  int ymax = 6;  //height
 	  
-	  System.out.println(row + " " + column);
-	  System.out.println(chips[row][column] != null);
-	  
 	  /*for (int x = 0; x < chips.length; x++) {
 		  for (int y = 0; y < chips[0].length; y++) {
 			  System.out.print(x + " " + y + "    ");
@@ -172,24 +168,31 @@ public class GameController implements RequestListener, ResolutionListener {
 		  System.out.println();
 	  }*/
 	  
-	  String currentColour = chips[row][column].getColour();
+	  Player lastChipOwner = null;
 	  int currentStreak = 0;
-	  
-	  System.out.println(chips[row][column].getColour() != null);
 	  
 	  //horizontal
 	  for (int x = 0; x < xmax; x++) {
-		  if (chips[row][x] != null && chips[row][x].getColour() == currentColour) {
+		  if (chips[row][x] == null){
+			  lastChipOwner = null;
+			  currentStreak = 0;
+			  //System.out.print(currentStreak + " ");
+		  } else if (lastChipOwner == null || chips[row][x].getOwner() == lastChipOwner) {
+			  System.out.println(lastChipOwner == null);
+			  System.out.println(chips[row][x].getOwner() == lastChipOwner);
 			  currentStreak++;
+			  //System.out.print(currentStreak + " ");
 			  if (currentStreak >= 4) {
 				  System.out.println("Win!");
 				  return true;
 			  }
 		  } else {
-			  currentColour = chips[row][x].getColour();
+			  lastChipOwner = chips[row][x].getOwner();
 			  currentStreak = 0;
+			  //System.out.print(currentStreak + " ");
 		  }
 	  }
+	  System.out.println();
 	  
 	  /*if (1 + checkWinRecursive(chips, row, column, 1, 0) + checkWinRecursive(chips, row, column, -1, 0) >= 4
 		  || 1 + checkWinRecursive(chips, row, column, 0, 1) + checkWinRecursive(chips, row, column, 0, -1) >= 4
@@ -233,6 +236,11 @@ public class GameController implements RequestListener, ResolutionListener {
   public Board getBoard() {
     return board;
   }
-
   
+  /**
+   * @return the currentPlayer
+   */
+  public Player getCurrentPlayer() {
+    return currentPlayer;
+  }
 }

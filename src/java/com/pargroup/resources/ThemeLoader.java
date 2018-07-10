@@ -9,9 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import com.pargroup.model.BoardConfig;
-import com.pargroup.view.animation.Sprite;
+import com.pargroup.animation.Sprite;
+import com.pargroup.view.BoardConfig;
 import com.pargroup.view.theme.Theme;
 
 /**
@@ -20,25 +19,20 @@ import com.pargroup.view.theme.Theme;
  */
 public class ThemeLoader {
 
-  public static final String DEFAULT_THEME = "default";
-  public static final String PENCIL_THEME = "pencil_theme";
-
   private static final String THEME_FILE = "theme.txt";
 
   private static final String DATA_SEPARATOR = "=";
 
-  private static final HashMap<String, Theme> THEMES = new HashMap<String, Theme>();
-
   /**
    * Use this method to load built-in themes.
    */
-  public static void loadThemes() {
+  static void loadThemes() {
 
     ThemeLoader.loadThemes(Paths.get("src/resources/themes/"));
 
   }
 
-  public static void loadThemes(Path pathToThemes) {
+  static void loadThemes(Path pathToThemes) {
 
     File themesFolder = pathToThemes.toFile();
 
@@ -46,7 +40,7 @@ public class ThemeLoader {
 
       Theme theme = ThemeLoader.loadTheme(themeFolder);
 
-      TextureLoader.loadTextures(theme, themeFolder);
+      TextureLoader.loadTextures(theme);
 
     }
 
@@ -58,7 +52,8 @@ public class ThemeLoader {
     BoardConfig boardConfig = new BoardConfig();
     Sprite sprite = new Sprite();
 
-    theme.setChipColours(new String[2]);
+    theme.setFolder(themeFolder);
+
     theme.setBoardConfig(boardConfig);
 
     theme.setSprite(sprite);
@@ -72,13 +67,14 @@ public class ThemeLoader {
 
       while ((line = reader.readLine()) != null) {
 
-        if (line.equals(Mode.TEXTURES.getKey())) {
-          mode = Mode.TEXTURES;
-        } else if (line.equals(Mode.BOARD_CONFIG.getKey())) {
-          mode = Mode.BOARD_CONFIG;
-        } else if (line.equals(Mode.SPRITE.getKey())) {
-          mode = Mode.SPRITE;
-        } else if (mode != null) {
+        Mode m = ThemeLoader.checkLineForMode(line);
+
+        if (m != null) {
+          mode = m;
+          continue;
+        }
+
+        if (mode != null) {
 
           String[] data = line.split(DATA_SEPARATOR);
 
@@ -90,6 +86,8 @@ public class ThemeLoader {
           String value = data[1];
 
           switch (mode) {
+            case GENERAL:
+              ThemeLoader.parseGeneralLine(theme, key, value);
             case TEXTURES:
               TextureLoader.parseTextureLine(theme, key, value);
               break;
@@ -108,7 +106,7 @@ public class ThemeLoader {
 
       }
 
-      THEMES.put(themeFolder.getName(), theme);
+      ThemeManager.addTheme(themeFolder.getName(), theme);
 
     } catch (IOException ex) {
       System.err.println("An error occured while loading the following theme: " + themeFolder);
@@ -119,23 +117,33 @@ public class ThemeLoader {
 
   }
 
+  private static Mode checkLineForMode(String line) {
+
+    for (Mode m : Mode.values()) {
+      if (line.equals(m.getKey())) {
+        return m;
+      }
+    }
+
+    return null;
+
+  }
+
+  private static void parseGeneralLine(Theme theme, String key, String value) {
+
+    if (key.equals("animation factory")) {
+      theme.setChipPlacementAnimation(AnimationLoader.loadAnimationFactory(value));
+    }
+
+  }
+
   private static InputStream getThemeFileInputStream(File folder) throws FileNotFoundException {
     return new FileInputStream(folder.toPath().resolve(THEME_FILE).toFile());
   }
 
-  /**
-   * Get the Theme object associated with the specified key.
-   * 
-   * @param key
-   * @return
-   */
-  public static Theme getTheme(String key) {
-    return THEMES.get(key);
-  }
-
   private static enum Mode {
 
-    TEXTURES("Textures"), BOARD_CONFIG("Board Config"), SPRITE("Sprite");
+    GENERAL("General"), TEXTURES("Textures"), BOARD_CONFIG("Board Config"), SPRITE("Sprite");
 
     private final String key;
 
