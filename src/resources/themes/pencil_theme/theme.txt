@@ -4,8 +4,8 @@ animation factory=com.pargroup.animation.SpriteAnimationFactory
 Textures
 board=Board.png
 background=background.png
-chips=SpriteSheetBlue.png, SpriteSheetRed.png
-indicators=Arrow Blue-resized.png, Arrow red-resized.png
+chip=SpriteSheetGray.png
+indicator=gray_arrow.png
 
 Board Config
 boardWidth=504

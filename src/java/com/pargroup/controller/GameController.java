@@ -47,7 +47,7 @@ public class GameController implements RequestListener, ResolutionListener {
 
     board = new Board();
 
-    players = new Player[] {new Player(0), new Player(1)};
+    players = new Player[] {new Player("#0000FFFF"), new Player("#FF0000FF")};
 
     turn = 0;
 
@@ -105,6 +105,7 @@ public class GameController implements RequestListener, ResolutionListener {
 
       Chip chip = new Chip();
       chip.setOwner(currentPlayer);
+      chip.setColour(currentPlayer.getColour());
 
       placeChip(chip, placeChipRequestEvent.getColumn());
 
