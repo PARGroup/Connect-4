@@ -3,6 +3,7 @@ package com.pargroup.view;
 import com.pargroup.event.listener.ThemeChangeListener;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.TextureLoader;
+import com.pargroup.resources.TextureManager;
 import com.pargroup.resources.ThemeManager;
 import javafx.scene.image.ImageView;
 
@@ -41,7 +42,11 @@ public class ChipView extends ImageView implements ThemeChangeListener {
   }
 
   private void updateTexture() {
-    setImage(TextureLoader.getChipTexture(chip.getOwner()));
+
+    setImage(TextureLoader.getChipTexture());
+
+    TextureManager.applyTextureColour(this, chip.getColour());
+
   }
 
   /**

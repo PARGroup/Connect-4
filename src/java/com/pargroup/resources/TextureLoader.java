@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.pargroup.model.Player;
 import com.pargroup.view.theme.Theme;
 import javafx.scene.image.Image;
 
@@ -39,20 +38,20 @@ public class TextureLoader {
     return getTexture(theme, theme.getBoardTexture());
   }
 
-  public static Image getChipTexture(Player player) {
-    return getChipTexture(ThemeManager.getCurrentTheme(), player);
+  public static Image getChipTexture() {
+    return getChipTexture(ThemeManager.getCurrentTheme());
   }
 
-  public static Image getChipTexture(Theme theme, Player player) {
-    return getTexture(theme, theme.getChipColours().get(player.getTurnIndex()));
+  public static Image getChipTexture(Theme theme) {
+    return getTexture(theme, theme.getChipTexture());
   }
 
-  public static Image getIndicatorTexture(Player player) {
-    return getIndicatorTexture(ThemeManager.getCurrentTheme(), player);
+  public static Image getIndicatorTexture() {
+    return getIndicatorTexture(ThemeManager.getCurrentTheme());
   }
 
-  public static Image getIndicatorTexture(Theme theme, Player player) {
-    return getTexture(theme, theme.getIndicatorTextures().get(player.getTurnIndex()));
+  public static Image getIndicatorTexture(Theme theme) {
+    return getTexture(theme, theme.getIndicatorTexture());
   }
 
   static void parseTextureLine(Theme theme, String key, String value) {
@@ -61,10 +60,10 @@ public class TextureLoader {
       theme.setBoardTexture(value);
     } else if (key.equals("background")) {
       theme.setBackgroundTexture(value);
-    } else if (key.equals("chips")) {
-      theme.setChipColours(TextureLoader.parseTextureList(value));
-    } else if (key.equals("indicators")) {
-      theme.setIndicatorTextures(TextureLoader.parseTextureList(value));
+    } else if (key.equals("chip")) {
+      theme.setChipTexture(value);
+    } else if (key.equals("indicator")) {
+      theme.setIndicatorTexture(value);
     }
 
   }
@@ -91,13 +90,9 @@ public class TextureLoader {
     TextureLoader.loadTexture(theme.getBackgroundTexture(), themeFolder);
     TextureLoader.loadTexture(theme.getBoardTexture(), themeFolder);
 
-    for (String chipColour : theme.getChipColours()) {
-      TextureLoader.loadTexture(chipColour, themeFolder);
-    }
+    TextureLoader.loadTexture(theme.getChipTexture(), themeFolder);
 
-    for (String indicatorTexture : theme.getIndicatorTextures()) {
-      TextureLoader.loadTexture(indicatorTexture, themeFolder);
-    }
+    TextureLoader.loadTexture(theme.getIndicatorTexture(), themeFolder);
 
   }
 

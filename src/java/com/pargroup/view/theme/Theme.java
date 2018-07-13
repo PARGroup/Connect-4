@@ -14,8 +14,6 @@ public class Theme {
 
   private File folder;
 
-  private List<String> chipColours;
-
   private ChipAnimationFactory chipPlacementAnimation;
 
   private String backgroundTexture;
@@ -25,7 +23,8 @@ public class Theme {
 
   private Sprite sprite;
 
-  private List<String> indicatorTextures;
+  private String chipTexture;
+  private String indicatorTexture;
 
   /**
    * @return the folder
@@ -39,20 +38,6 @@ public class Theme {
    */
   public void setFolder(File folder) {
     this.folder = folder;
-  }
-
-  /**
-   * @return the chipColours
-   */
-  public List<String> getChipColours() {
-    return chipColours;
-  }
-
-  /**
-   * @param chipColours the chipColours to set
-   */
-  public void setChipColours(List<String> chipColours) {
-    this.chipColours = chipColours;
   }
 
   /**
@@ -126,17 +111,31 @@ public class Theme {
   }
 
   /**
-   * @return the indicatorTextures
+   * @return the chipTexture
    */
-  public List<String> getIndicatorTextures() {
-    return indicatorTextures;
+  public String getChipTexture() {
+    return chipTexture;
   }
 
   /**
-   * @param indicatorTextures the indicatorTextures to set
+   * @param chipTexture the chipTexture to set
    */
-  public void setIndicatorTextures(List<String> indicatorTextures) {
-    this.indicatorTextures = indicatorTextures;
+  public void setChipTexture(String chipTexture) {
+    this.chipTexture = chipTexture;
+  }
+
+  /**
+   * @return the indicatorTexture
+   */
+  public String getIndicatorTexture() {
+    return indicatorTexture;
+  }
+
+  /**
+   * @param indicatorTexture the indicatorTexture to set
+   */
+  public void setIndicatorTexture(String indicatorTexture) {
+    this.indicatorTexture = indicatorTexture;
   }
 
 }

@@ -3,6 +3,7 @@ package com.pargroup.view;
 import com.pargroup.event.listener.ThemeChangeListener;
 import com.pargroup.model.Player;
 import com.pargroup.resources.TextureLoader;
+import com.pargroup.resources.TextureManager;
 import com.pargroup.resources.ThemeManager;
 import javafx.scene.image.ImageView;
 
@@ -48,7 +49,8 @@ public class PlacementIndicatorView extends ImageView implements ThemeChangeList
     if (currentPlayer == null) {
       setImage(null);
     } else {
-      setImage(TextureLoader.getIndicatorTexture(currentPlayer));
+      setImage(TextureLoader.getIndicatorTexture());
+      TextureManager.applyTextureColour(this, currentPlayer.getColour());
     }
 
   }

@@ -6,23 +6,29 @@ package com.pargroup.model;
  */
 public class Player {
 
-  private final int turnIndex;
+  private String colour;
 
   /**
-   * @param turnIndex
+   * @param colour
    */
-  public Player(int turnIndex) {
+  public Player(String colour) {
     super();
-
-    this.turnIndex = turnIndex;
-
+    this.colour = colour;
   }
 
   /**
-   * @return the turnIndex
+   * @return the colour
    */
-  public int getTurnIndex() {
-    return turnIndex;
+  public String getColour() {
+    return colour;
   }
+
+  /**
+   * @param colour the colour to set
+   */
+  public void setColour(String colour) {
+    this.colour = colour;
+  }
+
 
 }
