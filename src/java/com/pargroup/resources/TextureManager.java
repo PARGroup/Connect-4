@@ -1,11 +1,10 @@
 package com.pargroup.resources;
 
-import javafx.scene.CacheHint;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorInput;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 /**
@@ -18,16 +17,36 @@ public class TextureManager {
 
     Color c = Color.web(colour);
 
-    ColorAdjust monochrome = new ColorAdjust();
-    monochrome.setBrightness(1);
+    Image image = imageView.getImage();
 
-    Blend blush = new Blend(BlendMode.SRC_ATOP, monochrome,
-        new ColorInput(0, 0, imageView.getImage().getWidth(), imageView.getImage().getHeight(), c));
+    PixelReader pixelReader = image.getPixelReader();
 
-    imageView.setEffect(blush);
+    WritableImage newImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
 
-    imageView.setCache(true);
-    imageView.setCacheHint(CacheHint.SPEED);
+    PixelWriter pixelWriter = newImage.getPixelWriter();
+
+    for (int i = 0; i < image.getWidth(); i++) {
+      for (int j = 0; j < image.getHeight(); j++) {
+
+        int argb = pixelReader.getArgb(i, j);
+
+        int a = (argb >> 24) & 0xFF;
+        int r = (argb >> 16) & 0xFF;
+        int g = (argb >> 8) & 0xFF;
+        int b = (argb >> 0) & 0xFF;
+
+        int newR = Math.min((int) (c.getRed() * 255), r);
+        int newG = Math.min((int) (c.getGreen() * 255), g);
+        int newB = Math.min((int) (c.getBlue() * 255), b);
+
+        int newArgb = (a << 24) | (newR << 16) | (newG << 8) | (newB << 0);
+
+        pixelWriter.setArgb(i, j, newArgb);
+
+      }
+    }
+
+    imageView.setImage(newImage);
 
   }
 
