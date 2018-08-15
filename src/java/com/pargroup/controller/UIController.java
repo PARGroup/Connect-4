@@ -1,10 +1,17 @@
 package com.pargroup.controller;
 
+import com.pargroup.event.CheckBoardEvent;
 import com.pargroup.event.ChipPlacedEvent;
+import com.pargroup.event.DrawEvent;
+import com.pargroup.event.GameOverEvent;
 import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.PlayerWinEvent;
+import com.pargroup.event.RequestEvent;
 import com.pargroup.event.ResolutionEvent;
+import com.pargroup.event.RestartGameEvent;
 import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
+import com.pargroup.event.listener.RequestListener;
 import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Chip;
 import com.pargroup.resources.ThemeManager;
@@ -14,7 +21,9 @@ import com.pargroup.view.ChipView;
 import com.pargroup.view.GameView;
 import com.pargroup.view.PlacementIndicatorView;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -26,7 +35,7 @@ import javafx.stage.WindowEvent;
  * @author Rawad Aboudlal
  *
  */
-public class UIController implements ResolutionListener {
+public class UIController implements RequestListener, ResolutionListener {
 
   private GameController gameController;
   private GameView gameView;
@@ -51,8 +60,12 @@ public class UIController implements ResolutionListener {
 
   public void initialize() {
 
+    gameController.getEventManager().addRequestListener(RestartGameEvent.class, this);
+
     gameController.getEventManager().addResolutionListener(ChipPlacedEvent.class, this);
     gameController.getEventManager().addResolutionListener(StopGameEvent.class, this);
+    gameController.getEventManager().addResolutionListener(PlayerWinEvent.class, this);
+    gameController.getEventManager().addResolutionListener(DrawEvent.class, this);
 
   }
 
@@ -98,9 +111,28 @@ public class UIController implements ResolutionListener {
         }
       });
 
+    } else if (e instanceof GameOverEvent) {
+
+      gameView.showGameOverDialog((GameOverEvent) e);
+
     } else if (e instanceof StopGameEvent) {
 
       terminate();
+
+    }
+
+  }
+
+  /**
+   * @see com.pargroup.event.listener.RequestListener#onEvent(com.pargroup.event.RequestEvent)
+   */
+  @Override
+  public void onEvent(RequestEvent e) {
+
+    if (e instanceof RestartGameEvent) {
+
+      boardView.clearChips();
+      placementIndicatorView.setCurrentPlayer(gameController.getCurrentPlayer());
 
     }
 
@@ -146,6 +178,35 @@ public class UIController implements ResolutionListener {
 
           }
         });
+
+  }
+
+  public void addPlayAgainButton(Button playAgainButton) {
+
+    playAgainButton.setOnAction(new EventHandler<ActionEvent>() {
+      /**
+       * @see javafx.event.EventHandler#handle(javafx.event.Event)
+       */
+      @Override
+      public void handle(ActionEvent event) {
+        gameController.getEventManager().addEvent(new RestartGameEvent());
+        gameView.hideGameOverDialog();
+      }
+    });
+
+  }
+
+  public void addQuitButton(Button quitButton) {
+
+    quitButton.setOnAction(new EventHandler<ActionEvent>() {
+      /**
+       * @see javafx.event.EventHandler#handle(javafx.event.Event)
+       */
+      @Override
+      public void handle(ActionEvent event) {
+        gameController.getEventManager().addEvent(new StopRequestEvent());
+      }
+    });
 
   }
 
@@ -230,6 +291,8 @@ public class UIController implements ResolutionListener {
     gameController.getEventManager().unblockEvent(PlaceChipRequestEvent.class);
 
     placementIndicatorView.setCurrentPlayer(gameController.getCurrentPlayer());
+
+    gameController.getEventManager().addEvent(new CheckBoardEvent(chipView.getChip()));
 
   }
 

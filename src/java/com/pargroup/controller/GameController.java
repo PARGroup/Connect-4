@@ -1,12 +1,15 @@
 package com.pargroup.controller;
 
-import java.io.Console;
 import java.util.concurrent.TimeUnit;
+import com.pargroup.event.CheckBoardEvent;
 import com.pargroup.event.ChipPlacedEvent;
+import com.pargroup.event.DrawEvent;
 import com.pargroup.event.EventManager;
 import com.pargroup.event.PlaceChipRequestEvent;
+import com.pargroup.event.PlayerWinEvent;
 import com.pargroup.event.RequestEvent;
 import com.pargroup.event.ResolutionEvent;
+import com.pargroup.event.RestartGameEvent;
 import com.pargroup.event.StopGameEvent;
 import com.pargroup.event.StopRequestEvent;
 import com.pargroup.event.listener.RequestListener;
@@ -14,7 +17,6 @@ import com.pargroup.event.listener.ResolutionListener;
 import com.pargroup.model.Board;
 import com.pargroup.model.Chip;
 import com.pargroup.model.Player;
-import com.pargroup.resources.ThemeLoader;
 
 /**
  * @author Rawad Aboudlal
@@ -23,6 +25,7 @@ import com.pargroup.resources.ThemeLoader;
 public class GameController implements RequestListener, ResolutionListener {
 
   private static final long TICK_RATE = TimeUnit.MILLISECONDS.toNanos(30);
+  private static final int CHIPS_TO_WIN = 4;
 
   private EventManager eventManager;
 
@@ -44,12 +47,15 @@ public class GameController implements RequestListener, ResolutionListener {
 
     eventManager.addRequestListener(PlaceChipRequestEvent.class, this);
     eventManager.addRequestListener(StopRequestEvent.class, this);
+    eventManager.addRequestListener(RestartGameEvent.class, this);
+    eventManager.addRequestListener(CheckBoardEvent.class, this);
 
     eventManager.addResolutionListener(ChipPlacedEvent.class, this);
 
     board = new Board();
 
-    players = new Player[] {new Player("#0000FFFF"), new Player("#FF0000FF")};
+    players =
+        new Player[] {new Player("#0000FFFF", "Player 1"), new Player("#FF0000FF", "Player 2")};
 
     turn = 0;
 
@@ -111,6 +117,24 @@ public class GameController implements RequestListener, ResolutionListener {
 
       placeChip(chip, placeChipRequestEvent.getColumn());
 
+    } else if (e instanceof CheckBoardEvent) {
+
+      CheckBoardEvent checkBoardEvent = (CheckBoardEvent) e;
+
+      Chip chip = checkBoardEvent.getLastChipPlaced();
+
+      if (checkWin(board.getChips(), chip)) {
+        eventManager.addEvent(new PlayerWinEvent(chip.getOwner()));
+      } else if (isBoardFull(board.getChips())) {
+        eventManager.addEvent(new DrawEvent());
+      }
+
+    } else if (e instanceof RestartGameEvent) {
+
+      board.clear();
+      turn = 0;
+      currentPlayer = players[turn];
+
     } else if (e instanceof StopRequestEvent) {
 
       // Could have some logic to decide whether we should stop right now or not (e.g. prompt to
@@ -152,72 +176,301 @@ public class GameController implements RequestListener, ResolutionListener {
     row--;
 
     chips[row][column] = chip;
-    eventManager.addEvent(new ChipPlacedEvent(chip, column, row));//TODO: refactor chipplaced event
-    //TODO: stop using TODOs
 
-    checkWin(board.getChips(), row, column);
+    chip.setRow(row);
+    chip.setColumn(column);
+
+    eventManager.addEvent(new ChipPlacedEvent(chip, column, row));// TODO: refactor chipplaced event
+    // TODO: stop using TODOs
+
   }
-  
-  private boolean checkWin(Chip[][] chips, int row, int column) {
-	  int xmax = 7; //width
-	  int ymax = 6;  //height
-	  
-	  /*for (int x = 0; x < chips.length; x++) {
-		  for (int y = 0; y < chips[0].length; y++) {
-			  System.out.print(x + " " + y + "    ");
-		  }
-		  System.out.println();
-	  }*/
-	  
-	  Player lastChipOwner = null;
-	  int currentStreak = 0;
-	  
-	  //horizontal
-	  for (int x = 0; x < xmax; x++) {
-		  if (chips[row][x] == null){
-			  lastChipOwner = null;
-			  currentStreak = 0;
-			  //System.out.print(currentStreak + " ");
-		  } else if (lastChipOwner == null || chips[row][x].getOwner() == lastChipOwner) {
-			  System.out.println(lastChipOwner == null);
-			  System.out.println(chips[row][x].getOwner() == lastChipOwner);
-			  currentStreak++;
-			  //System.out.print(currentStreak + " ");
-			  if (currentStreak >= 4) {
-				  System.out.println("Win!");
-				  return true;
-			  }
-		  } else {
-			  lastChipOwner = chips[row][x].getOwner();
-			  currentStreak = 0;
-			  //System.out.print(currentStreak + " ");
-		  }
-	  }
-	  System.out.println();
-	  
-	  /*if (1 + checkWinRecursive(chips, row, column, 1, 0) + checkWinRecursive(chips, row, column, -1, 0) >= 4
-		  || 1 + checkWinRecursive(chips, row, column, 0, 1) + checkWinRecursive(chips, row, column, 0, -1) >= 4
-		  || 1 + checkWinRecursive(chips, row, column, 1, 1) + checkWinRecursive(chips, row, column, -1, -1) >= 4
-		  || 1 + checkWinRecursive(chips, row, column, 1, -1) + checkWinRecursive(chips, row, column, -1, 1) >= 4) {
-		  System.out.println("Win!");
-	  }*/
-	  
-	  return false; //temp
+
+  private boolean isBoardFull(Chip[][] chips) {
+
+    for (int row = 0; row < chips.length; row++) {
+      for (int column = 0; column < chips[row].length; column++) {
+        if (chips[row][column] == null) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+
   }
-  
-  private int checkWinRecursive(Chip[][] chips, int row, int column, int dirx, int diry) {
-	  int xmax = 7; //width
-	  int ymax = 6;  //height
-	  
-	  if (row + diry < 0 || row + diry >= ymax || column + dirx < 0 || column + dirx >= xmax) {
-		  return 0;
-	  } else if (chips[row+diry][column+dirx] == null) {
-		  return 0;
-	  } else if (chips[row][column].getOwner() == chips[row+diry][column+dirx].getOwner()) {
-		  return 0;
-	  } else {
-		  return 1 + checkWinRecursive(chips, row+diry, column+dirx, dirx, diry);
-	  }
+
+  private boolean checkWin(Chip[][] chips, Chip lastChipPlaced) {
+
+    final int column = lastChipPlaced.getColumn();
+    final int row = lastChipPlaced.getRow();
+
+    return checkHorizontalWin(chips, lastChipPlaced, column, row)
+        || checkVerticalWin(chips, lastChipPlaced, column, row)
+        || checkRightDiagonalWin(chips, lastChipPlaced, column, row)
+        || checkLeftDiagonalWin(chips, lastChipPlaced, column, row);
+
+  }
+
+  private boolean checkHorizontalWin(Chip[][] chips, Chip lastChipPlaced, int column, int row) {
+
+    int currentStreak = 1;
+
+    for (int i = 1; i < CHIPS_TO_WIN; i++) {
+
+      int xToCheck = column + i;
+
+      if (xToCheck >= Board.COLUMNS) {
+        break;
+      }
+
+      Chip chip = chips[row][xToCheck];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    for (int i = -1; i > -CHIPS_TO_WIN; i--) {
+
+      int xToCheck = column + i;
+
+      if (xToCheck < 0) {
+        break;
+      }
+
+      Chip chip = chips[row][xToCheck];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    return false;
+
+  }
+
+  private boolean checkVerticalWin(Chip[][] chips, Chip lastChipPlaced, int column, int row) {
+
+    int currentStreak = 1;
+
+    for (int i = 1; i < CHIPS_TO_WIN; i++) {
+
+      int yToCheck = row + i;
+
+      if (yToCheck >= Board.ROWS) {
+        break;
+      }
+
+      Chip chip = chips[yToCheck][column];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    for (int i = -1; i > -CHIPS_TO_WIN; i--) {
+
+      int yToCheck = row + i;
+
+      if (yToCheck < 0) {
+        break;
+      }
+
+      Chip chip = chips[yToCheck][column];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    return false;
+
+  }
+
+  /**
+   * OOO*</br>
+   * OO*O</br>
+   * O*OO</br>
+   * *OOO
+   * 
+   * @param chips
+   * @param lastChipPlaced
+   * @param column
+   * @param row
+   * @return
+   */
+  private boolean checkRightDiagonalWin(Chip[][] chips, Chip lastChipPlaced, int column, int row) {
+
+    int currentStreak = 1;
+
+
+    for (int i = 1; i < CHIPS_TO_WIN; i++) {
+
+      int xToCheck = column + i;
+      int yToCheck = row - i;
+
+      if (xToCheck >= Board.COLUMNS || yToCheck < 0) {
+        break;
+      }
+
+      Chip chip = chips[yToCheck][xToCheck];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    for (int i = -1; i > -CHIPS_TO_WIN; i--) {
+
+      int xToCheck = column + i;
+      int yToCheck = row - i;
+
+      if (xToCheck < 0 || yToCheck >= Board.ROWS) {
+        break;
+      }
+
+      Chip chip = chips[yToCheck][xToCheck];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    return false;
+
+  }
+
+  /**
+   * 
+   * *OOO</br>
+   * O*OO</br>
+   * OO*O</br>
+   * OOO*
+   * 
+   * @param chips
+   * @param lastChipPlaced
+   * @param column
+   * @param row
+   * @return
+   */
+  private boolean checkLeftDiagonalWin(Chip[][] chips, Chip lastChipPlaced, int column, int row) {
+
+    int currentStreak = 1;
+
+
+    for (int i = 1; i < CHIPS_TO_WIN; i++) {
+
+      int xToCheck = column + i;
+      int yToCheck = row + i;
+
+      if (xToCheck >= Board.COLUMNS || yToCheck >= Board.ROWS) {
+        break;
+      }
+
+      Chip chip = chips[yToCheck][xToCheck];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    for (int i = -1; i > -CHIPS_TO_WIN; i--) {
+
+      int xToCheck = column + i;
+      int yToCheck = row + i;
+
+      if (xToCheck < 0 || yToCheck < 0) {
+        break;
+      }
+
+      Chip chip = chips[yToCheck][xToCheck];
+
+      if (chip == null) {
+        break;
+      } else if (chip.getOwner().equals(lastChipPlaced.getOwner())) {
+        currentStreak++;
+      } else {
+        break;
+      }
+
+
+    }
+
+    if (currentStreak >= CHIPS_TO_WIN) {
+      return true;
+    }
+
+    return false;
+
   }
 
   public void terminate() {
@@ -237,7 +490,7 @@ public class GameController implements RequestListener, ResolutionListener {
   public Board getBoard() {
     return board;
   }
-  
+
   /**
    * @return the currentPlayer
    */

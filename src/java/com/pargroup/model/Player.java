@@ -8,12 +8,16 @@ public class Player {
 
   private String colour;
 
+  private String name;
+
   /**
    * @param colour
+   * @param name
    */
-  public Player(String colour) {
+  public Player(String colour, String name) {
     super();
     this.colour = colour;
+    this.name = name;
   }
 
   /**
@@ -30,5 +34,18 @@ public class Player {
     this.colour = colour;
   }
 
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
 }

@@ -114,6 +114,21 @@ public class BoardView extends StackPane implements ThemeChangeListener {
 
   }
 
+  public void clearChips() {
+
+    Platform.runLater(new Runnable() {
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+        chipsPane.getChildren().clear();
+      }
+    });
+
+
+  }
+
   private void updateTheme() {
 
     this.theme = ThemeManager.getCurrentTheme();
