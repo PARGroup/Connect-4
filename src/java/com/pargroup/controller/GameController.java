@@ -154,20 +154,15 @@ public class GameController implements RequestListener, ResolutionListener {
     eventManager.addEvent(new ChipPlacedEvent(chip, column, row));//TODO: refactor chipplaced event
     //TODO: stop using TODOs
 
-    checkWin(board.getChips(), row, column);
+    if (checkWin(board.getChips(), row, column)) {
+    	System.out.println("You win!");
+    };
   }
   
   private boolean checkWin(Chip[][] chips, int row, int column) {
-	  int xmax = 7; //width
-	  int ymax = 6;  //height
-	  
-	  /*for (int x = 0; x < chips.length; x++) {
-		  for (int y = 0; y < chips[0].length; y++) {
-			  System.out.print(x + " " + y + "    ");
-		  }
-		  System.out.println();
-	  }*/
-	  
+	  int xmax = Board.COLUMNS; //width
+	  int ymax = Board.ROWS;  //height
+	 	  
 	  Player lastChipOwner = null;
 	  int currentStreak = 0;
 	  
@@ -176,35 +171,100 @@ public class GameController implements RequestListener, ResolutionListener {
 		  if (chips[row][x] == null){
 			  lastChipOwner = null;
 			  currentStreak = 0;
-			  //System.out.print(currentStreak + " ");
-		  } else if (lastChipOwner == null || chips[row][x].getOwner() == lastChipOwner) {
-			  System.out.println(lastChipOwner == null);
-			  System.out.println(chips[row][x].getOwner() == lastChipOwner);
+		  } else if (lastChipOwner == null) {
+			  currentStreak = 1;
+			  lastChipOwner = chips[row][x].getOwner();
+		  } else if (chips[row][x].getOwner() == lastChipOwner) {
 			  currentStreak++;
-			  //System.out.print(currentStreak + " ");
 			  if (currentStreak >= 4) {
-				  System.out.println("Win!");
 				  return true;
 			  }
 		  } else {
 			  lastChipOwner = chips[row][x].getOwner();
 			  currentStreak = 0;
-			  //System.out.print(currentStreak + " ");
 		  }
 	  }
-	  System.out.println();
 	  
-	  /*if (1 + checkWinRecursive(chips, row, column, 1, 0) + checkWinRecursive(chips, row, column, -1, 0) >= 4
-		  || 1 + checkWinRecursive(chips, row, column, 0, 1) + checkWinRecursive(chips, row, column, 0, -1) >= 4
-		  || 1 + checkWinRecursive(chips, row, column, 1, 1) + checkWinRecursive(chips, row, column, -1, -1) >= 4
-		  || 1 + checkWinRecursive(chips, row, column, 1, -1) + checkWinRecursive(chips, row, column, -1, 1) >= 4) {
-		  System.out.println("Win!");
-	  }*/
+	  lastChipOwner = null;
+	  currentStreak = 0;
 	  
-	  return false; //temp
+	  //vertical
+	  for (int y = 0; y < ymax; y++) {
+		  if (chips[y][column] == null){
+			  lastChipOwner = null;
+			  currentStreak = 0;
+		  } else if (lastChipOwner == null) {
+			  currentStreak = 1;
+			  lastChipOwner = chips[y][column].getOwner();
+		  } else if (chips[y][column].getOwner() == lastChipOwner) {
+			  currentStreak++;
+			  if (currentStreak >= 4) {
+				  return true;
+			  }
+		  } else {
+			  lastChipOwner = chips[y][column].getOwner();
+			  currentStreak = 0;
+		  }
+	  }
+	  
+	  lastChipOwner = null;
+	  currentStreak = 0;
+	  
+	  //top-left diagonal
+	  for (int x = Math.max((xmax-ymax), 0), y = Math.max((ymax-xmax), 0); x < xmax && y < ymax; x++, y++) {
+		  System.out.println(x + " " + y);
+		  if (chips[y][x] == null){
+			  lastChipOwner = null;
+			  currentStreak = 0;
+			  System.out.print(currentStreak + " ");
+		  } else if (lastChipOwner == null) {
+			  currentStreak = 1;
+			  lastChipOwner = chips[y][x].getOwner();
+		  } else if (chips[y][x].getOwner() == lastChipOwner) {
+			  currentStreak++;
+			  System.out.print(currentStreak + " ");
+			  if (currentStreak >= 4) {
+				  return true;
+			  }
+		  } else {
+			  lastChipOwner = chips[y][x].getOwner();
+			  currentStreak = 0;
+			  System.out.print(currentStreak + " ");
+		  }
+	  }
+	  
+	  lastChipOwner = null;
+	  currentStreak = 0;
+	  
+	  //top-right diagonal
+	  for (int x = 5, y = Math.max((ymax-xmax), 0); x >= 0 && y < ymax; x--, y++) {
+		  System.out.println(x + " " + y);
+		  if (chips[y][x] == null){
+			  lastChipOwner = null;
+			  currentStreak = 0;
+			  System.out.print(currentStreak + " ");
+		  } else if (lastChipOwner == null) {
+			  currentStreak = 1;
+			  lastChipOwner = chips[y][x].getOwner();
+		  } else if (chips[y][x].getOwner() == lastChipOwner) {
+			  currentStreak++;
+			  System.out.print(currentStreak + " ");
+			  if (currentStreak >= 4) {
+				  return true;
+			  }
+		  } else {
+			  lastChipOwner = chips[y][x].getOwner();
+			  currentStreak = 0;
+			  System.out.print(currentStreak + " ");
+		  }
+	  }
+	  
+	  return false;
   }
   
   private int checkWinRecursive(Chip[][] chips, int row, int column, int dirx, int diry) {
+	  //I can dream, man
+	  
 	  int xmax = 7; //width
 	  int ymax = 6;  //height
 	  
